@@ -17,7 +17,7 @@ interface PostPreviewProps {
   maxCapacity: number;
   locationName: string;
   status?: "OPEN" | "CLOSED";
-  currentPerson: number;
+  currentCapacity: number;
   link?: string; // 추가된 부분
   onClick?: () => void; // 추가된 부분
 }
@@ -37,8 +37,8 @@ const PostPreview: React.FC<PostPreviewProps> = ({
   time,
   maxCapacity,
   locationName,
-  status = "OPEN", // 기본값 설정
-  currentPerson: initialCurrentPerson,
+  status, // 기본값 설정
+  currentCapacity: initialCurrentPerson,
   link,
   onClick,
 }) => {

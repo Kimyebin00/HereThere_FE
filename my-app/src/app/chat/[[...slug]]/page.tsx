@@ -8,20 +8,24 @@ import io from "socket.io-client";
 import icons_chat from "@/assets/chat/icons_chat.svg";
 import back from "@/assets/chat/icons_back.svg";
 import PostPreview from "@/components/PostPreview";
+import { useRouter } from "next/navigation";
+import ConfirmModal from "@/components/ConfirmModal";
 
-const fetchChatRooms = async ({ queryKey }) => {
-  const [_key, { afterCursor, beforeCursor }] = queryKey;
+// 사용자 정보를 가져오는 함수 (username 가져옴)
+const fetchUserInfo = async () => {
+  const response = await axios.get("http://localhost:8000/api/v1/users", {
+    withCredentials: true,
+  });
+  return response.data.username; // username 반환
+};
+
+const fetchChatRooms = async () => {
   const response = await axios.get(
     "http://localhost:8000/api/v1/users/chatrooms",
     {
-      params: {
-        afterCursor,
-        beforeCursor,
-      },
       withCredentials: true,
     },
   );
-
   return response.data;
 };
 
@@ -32,7 +36,6 @@ const fetchChatRoomDetails = async (chatRoomId: number) => {
       withCredentials: true,
     },
   );
-  console.log("Fetched chat room details:", response.data); // 콘솔 로그 추가
   return response.data;
 };
 
@@ -57,27 +60,52 @@ const leaveChatRoom = async (chatRoomId: number) => {
   return response.data;
 };
 
-const Chat = () => {
+const Chat = ({ params }: { params: { slug?: string[] } }) => {
   const [selectedChatRoom, setSelectedChatRoom] = useState<number | null>(null);
   const [pastMessages, setPastMessages] = useState<{ [key: number]: any[] }>(
     {},
   );
   const [newMessages, setNewMessages] = useState<{ [key: number]: any[] }>({});
   const [newMessage, setNewMessage] = useState<string>("");
-  const [currentUserNickname, setCurrentUserNickname] =
-    useState<string>("지윤");
+  const [currentUserNickname, setCurrentUserNickname] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const chatListRef = useRef<HTMLDivElement | null>(null); // 목록 스크롤 Ref
+  const chatRoomRef = useRef<HTMLDivElement | null>(null);
   const socketRef = useRef<any>(null);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
-  const {
-    data: chatRoomsData = { chatRooms: [], cursor: {} },
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["chatRooms", { afterCursor: null, beforeCursor: null }],
+  const handleChatButtonClick = () => {
+    router.push("/chat");
+  };
+
+  // slug 값 확인 후 selectedChatRoom 설정
+  useEffect(() => {
+    const chatRoomId = params?.slug ? parseInt(params.slug[0], 10) : null;
+    setSelectedChatRoom(chatRoomId);
+  }, [params?.slug]);
+
+  //현재 사용자 nickname 저장
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const nickname = await fetchUserInfo();
+        setCurrentUserNickname(nickname);
+        console.log("설정된 사용자 닉네임:", nickname);
+      } catch (error) {
+        console.error("사용자 정보를 가져오는 데 실패했습니다:", error);
+      }
+    };
+    getUserInfo();
+  }, []);
+
+  // 채팅방 목록 데이터 가져오기
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["chatRooms"],
     queryFn: fetchChatRooms,
   });
 
+  // 선택된 채팅방의 세부 정보 가져오기
   const { data: chatRoomDetailsData } = useQuery({
     queryKey: ["chatRoomDetails", selectedChatRoom],
     queryFn: () => fetchChatRoomDetails(selectedChatRoom!),
@@ -91,50 +119,102 @@ const Chat = () => {
   const leaveMutation = useMutation({
     mutationFn: leaveChatRoom,
     onSuccess: () => {
-      console.log(`Left chat room ${selectedChatRoom}`);
-      setSelectedChatRoom(null);
-      queryClient.invalidateQueries("chatRooms");
+      router.push("/chat"); // 채팅방을 나가면 기본 채팅 경로로 리다이렉트
+      queryClient.invalidateQueries(["chatRooms"]);
     },
   });
 
+  const handleLeaveChatRoom = () => {
+    setIsModalOpen(true); // 나가기 버튼을 눌렀을 때 모달 열림
+  };
+
+  const handleConfirmLeave = () => {
+    setIsModalOpen(false); // 모달 닫기
+    if (selectedChatRoom) {
+      leaveMutation.mutate(selectedChatRoom); // 확인을 누르면 채팅방 나가기
+    }
+  };
+
+  const handleCancelLeave = () => {
+    setIsModalOpen(false); // 취소를 누르면 모달 닫기
+  };
+
+  // 채팅방 클릭 시 스크롤 위치를 저장
+  const handleChatRoomClick = (chatRoomId: number) => {
+    if (chatListRef.current) {
+      sessionStorage.setItem(
+        "scrollPosition",
+        chatListRef.current.scrollTop.toString(),
+      ); // 스크롤 위치를 sessionStorage에 저장
+    }
+    router.push(`/chat/${chatRoomId}`); // 채팅방 이동
+  };
+
+  // 목록이 렌더링될 때 스크롤 위치를 복원
+  useEffect(() => {
+    const savedPosition = sessionStorage.getItem("scrollPosition");
+    if (chatListRef.current && savedPosition) {
+      chatListRef.current.scrollTop = parseInt(savedPosition, 10); // 저장된 위치로 스크롤 이동
+    }
+  }, [data]);
+
+  // 새로운 메시지가 생기거나 채팅방에 들어갈 때 자동으로 스크롤 하단으로 유지
+  const scrollToBottom = () => {
+    if (chatRoomRef.current) {
+      chatRoomRef.current.scrollTop = chatRoomRef.current.scrollHeight;
+    }
+  };
+
   useEffect(() => {
     if (chatRoomDetailsData) {
-      console.log("Fetched chat room details:", chatRoomDetailsData);
       setPastMessages(prev => ({
         ...prev,
         [selectedChatRoom!]: chatRoomDetailsData.messages || [],
       }));
+      scrollToBottom(); // 채팅방에 들어갈 때 스크롤 하단으로
     }
   }, [chatRoomDetailsData, selectedChatRoom]);
 
   useEffect(() => {
-    console.log("Updated pastMessages:", pastMessages);
-  }, [pastMessages]);
+    if (newMessages[selectedChatRoom!]?.length > 0) {
+      scrollToBottom(); // 새로운 메시지가 있을 때 스크롤 하단으로
+    }
+  }, [newMessages]);
 
   useEffect(() => {
     socketRef.current = io("http://localhost:8000");
-
-    socketRef.current.on("connect", () => {
+    const handleConnect = () => {
       console.log("Connected to Socket.IO server");
-    });
+    };
 
-    socketRef.current.on("broadcastMessage", message => {
-      console.log("Received broadcastMessage:", message);
+    const handleDisconnect = () => {
+      console.log("Disconnected from Socket.IO server");
+    };
+
+    const handleBroadcastMessage = message => {
+      const updatedMessage = {
+        ...message,
+        nickname: message.nickName, // nickName을 nickname으로 매핑
+      };
+
       setNewMessages(prevMessages => ({
         ...prevMessages,
         [message.chatRoomId]: [
           ...(prevMessages[message.chatRoomId] || []),
-          message,
+          updatedMessage,
         ],
       }));
-    });
+    };
 
-    socketRef.current.on("disconnect", () => {
-      console.log("Disconnected from Socket.IO server");
-    });
+    socketRef.current.on("connect", handleConnect);
+    socketRef.current.on("broadcastMessage", handleBroadcastMessage);
+    socketRef.current.on("disconnect", handleDisconnect);
 
     return () => {
       if (socketRef.current) {
+        socketRef.current.off("connect", handleConnect);
+        socketRef.current.off("broadcastMessage", handleBroadcastMessage);
+        socketRef.current.off("disconnect", handleDisconnect);
         socketRef.current.disconnect();
       }
     };
@@ -149,64 +229,67 @@ const Chat = () => {
     }
   };
 
-  const handleLeaveChatRoom = () => {
-    if (selectedChatRoom) {
-      leaveMutation.mutate(selectedChatRoom);
+  const handleKeyPress = e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error fetching chat rooms</p>;
+  if (error) return <p>로그인 후 이용가능합니다.</p>;
 
-  const selectedChatRoomTitle = chatRoomsData.chatRooms.find(
+  const selectedChatRoomTitle = data?.chatRooms?.find(
     room => room.board.boardId === selectedChatRoom,
   )?.board.title;
 
   return (
-    <div className="flex">
+    <div className="flex h-screen overflow-hidden">
       <main className="chat flex w-[100%] min-h-screen">
-        <div className="chat_list flex flex-col my-[1rem] bg-white xl:border-r xl:w-[50rem] lg:w-[40rem] lg:border-r md:w-[30rem] md:border-r w-0">
-          <div className="flex justify-between h-[4rem] mx-[1rem] mb-[1rem]">
-            <div className="flex items-center">
+        <div
+          className="chat_list flex flex-col mb-[1rem] bg-white xl:border-r xl:w-[62rem] lg:w-[40rem] lg:border-r md:w-[30rem] md:border-r w-[0%] overflow-auto"
+          ref={chatListRef} // 목록의 스크롤 Ref
+        >
+          <div className="flex justify-between m-[1rem] px-[1rem] mt-[2rem]">
+            <div
+              className="flex items-center cursor-pointer"
+              onClick={handleChatButtonClick}
+            >
               <Image src={icons_chat} alt="채팅 아이콘" />
               <h1 className="text-[1.5rem] font-semibold ml-[0.5rem]">CHAT</h1>
             </div>
           </div>
-
-          <ul className="px-[1rem] mx-[1em]">
-            {chatRoomsData.chatRooms.map((chatRoom: any) => (
-              <li key={chatRoom.board.boardId} className="mb-4">
+          <ul className="flex flex-col px-[1rem] mx-auto">
+            {data?.chatRooms.map((chatRoom: any) => (
+              <li
+                key={chatRoom.id}
+                className={`mb-4 border ${
+                  selectedChatRoom === chatRoom.id
+                    ? "border-darkpink" //  채팅방에만 테두리 색상 적용
+                    : "border-transparent"
+                } rounded-3xl border-2`}
+              >
                 <PostPreview
-                  key={chatRoom.board.boardId}
+                  key={chatRoom.id}
                   board_id={chatRoom.board.boardId}
                   title={chatRoom.board.title}
                   tag={[chatRoom.board.category]}
                   date={chatRoom.board.date}
                   time={chatRoom.board.start_time}
-                  currentPerson={chatRoom.board.member_count}
+                  currentCapacity={chatRoom.board.currentPerson}
                   maxCapacity={chatRoom.board.max_capacity}
-                  location="채팅방 위치 없음"
-                  onClick={() => {
-                    console.log(
-                      "Selected chat room ID:",
-                      chatRoom.board.boardId,
-                    );
-                    setSelectedChatRoom(chatRoom.board.boardId);
-                    queryClient.invalidateQueries([
-                      "chatRoomDetails",
-                      chatRoom.board.boardId,
-                    ]);
-                  }}
+                  locationName={chatRoom.board.location.locationName}
+                  status={chatRoom.board.status}
+                  onClick={() => handleChatRoomClick(chatRoom.id)} // 클릭 시 스크롤 위치 저장 및 이동
                 />
               </li>
             ))}
           </ul>
         </div>
-
-        <div className="chat_room w-full min-h-screen flex flex-col">
+        <div className="chat_room w-full min-h-screen flex flex-col overflow-auto">
           {selectedChatRoom ? (
             <>
-              <div className="flex justify-between h-[4rem] m-[1rem] px-[1rem]">
+              <div className="flex justify-between m-[1rem] px-[1rem] mt-[2rem]">
                 <div className="flex items-center">
                   <Image src={icons_chat} alt="채팅 아이콘" />
                   <h1 className="text-[1.5rem] font-semibold ml-[0.5rem]">
@@ -217,7 +300,17 @@ const Chat = () => {
                   <Image src={back} alt="뒤로" />
                 </button>
               </div>
-              <div className="flex-grow p-4 overflow-auto">
+
+              <ConfirmModal
+                isOpen={isModalOpen}
+                onConfirm={handleConfirmLeave}
+                onCancel={handleCancelLeave}
+              />
+
+              <div
+                className="flex-grow py-4 px-[2rem] overflow-auto"
+                ref={chatRoomRef}
+              >
                 {selectedChatRoom &&
                   (pastMessages[selectedChatRoom] || []).map((msg, index) => (
                     <div
@@ -231,7 +324,7 @@ const Chat = () => {
                       <div
                         className={`p-2 rounded-lg ${
                           msg.nickname === currentUserNickname
-                            ? "bg-blue-500 text-white"
+                            ? "bg-pink text-black"
                             : "bg-lightgray text-black"
                         }`}
                       >
@@ -253,7 +346,7 @@ const Chat = () => {
                       <div
                         className={`p-2 rounded-lg ${
                           msg.nickname === currentUserNickname
-                            ? "bg-blue-500 text-white"
+                            ? "bg-pink text-black"
                             : "bg-lightgray text-black"
                         }`}
                       >
@@ -263,17 +356,17 @@ const Chat = () => {
                     </div>
                   ))}
               </div>
-              <div className="input_container flex items-center justify-center px-[2rem] py-[1rem]">
+              <div className="input_container flex items-center justify-center px-[2rem] py-[1rem] mb-16 md:mb-0">
                 <input
                   type="text"
-                  className="h-[3rem] mr-[1rem] border border-gray-300 rounded-lg px-4 w-full"
+                  className="h-[3rem] mr-[1rem] border border-lightgray rounded-lg px-4 w-full"
                   placeholder="메시지를 입력하세요..."
                   value={newMessage}
                   onChange={e => setNewMessage(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && handleSendMessage()}
+                  onKeyPress={handleKeyPress}
                 />
                 <button
-                  className="w-[3.5rem] h-[3rem] bg-zinc-200 border border-gray-300 rounded-lg"
+                  className="w-[6rem] h-[3rem] bg-darkpink  rounded-lg text-white"
                   onClick={handleSendMessage}
                 >
                   전송

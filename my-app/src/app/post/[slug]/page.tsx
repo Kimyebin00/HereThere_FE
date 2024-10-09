@@ -30,8 +30,6 @@ const Post = ({ params }: { params: { slug: number } }) => {
   // let locationAddress = ""
   const router = useRouter();
 
-  
-
   const deletePostData = async id => {
     const res = await api.delete(
       `/api/v1/boards/${id}`,
@@ -45,7 +43,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
     const res = await api.post(
       `/api/v1/chatrooms/join/${id}`,
       {},
-      { withCredentials: true }
+      { withCredentials: true },
     );
 
     return res.data;
@@ -170,9 +168,11 @@ const Post = ({ params }: { params: { slug: number } }) => {
   useEffect(() => {
     //getMutation.mutate(params.slug);
 
-    const eventSource = new EventSource(`http://localhost:8000/sse/board/${params.slug}`);
+    const eventSource = new EventSource(
+      `http://localhost:8000/sse/board/${params.slug}`,
+    );
 
-    eventSource.onmessage = (event) => {
+    eventSource.onmessage = event => {
       const data = JSON.parse(event.data);
       setCurrentPerson(data.currentPerson);
     };
@@ -194,7 +194,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
       </div>
       <div className="place-items-center rounded-t-[4rem] bg-white relative bottom-14 ">
         <div className="md:flex-none flex md:justify-normal justify-center md:items-start items-center">
-          <div className="w-80 h-20 bg-lightpink flex items-center rounded-3xl px-6 md:ml-20 drop-shadow-md relative bottom-10 ">
+          <div className="h-20 bg-lightpink flex items-center rounded-3xl px-6 md:ml-20 drop-shadow-md relative bottom-10 ">
             <Image
               src={MegaphoneImage}
               alt="Background Image"

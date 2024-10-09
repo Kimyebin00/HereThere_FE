@@ -125,17 +125,17 @@ const Boards = () => {
                 maxCapacity={data.maxCapacity}
                 locationName={data.location.locationName}
                 status={data.status}
-                currentPerson={data.currentPerson}
+                currentCapacity={data.currentCapacity}
                 link={`/post/${data.id}`}
               />
             ))}
           </div>
         )}
       </div>
-      <div className="fixed bottom-16 sm:bottom-2 w-full py-2">
+      <div className="fixed bottom-16 md:bottom-2 w-full py-2">
         <Stack
           spacing={2}
-          className="flex justify-center items-center sm:mr-[5rem]"
+          className="flex justify-center items-center md:mr-[5rem]"
         >
           <Pagination
             count={totalPage}
