@@ -10,6 +10,7 @@ import back from "@/assets/chat/icons_back.svg";
 import PostPreview from "@/components/PostPreview";
 import { useRouter } from "next/navigation";
 import ConfirmModal from "@/components/ConfirmModal";
+import sendChatProps from "@/types/chat";
 
 // 사용자 정보를 가져오는 함수 (username 가져옴)
 const fetchUserInfo = async () => {
@@ -39,7 +40,7 @@ const fetchChatRoomDetails = async (chatRoomId: number) => {
   return response.data;
 };
 
-const sendMessage = async ({ chatRoomId, content }) => {
+const sendMessage = async ({ chatRoomId, content }: sendChatProps) => {
   const response = await axios.post(
     `http://localhost:8000/api/v1/chatrooms/${chatRoomId}/messages`,
     { content },
