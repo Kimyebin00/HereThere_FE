@@ -12,6 +12,23 @@ import { useRouter } from "next/navigation";
 import ConfirmModal from "@/components/ConfirmModal";
 import sendChatProps from "@/types/chat";
 
+
+interface ChatRoom {
+  id: number;
+  board: {
+    boardId: number;
+    title: string;
+    category: string;
+    date: string;
+    currentPerson: number;
+    maxCapacity: number;
+    location: {
+      locationName: string;
+    };
+    status: "OPEN" | "CLOSED";
+  };
+}
+
 // 사용자 정보를 가져오는 함수 (username 가져옴)
 const fetchUserInfo = async () => {
   const response = await axios.get("http://localhost:8000/api/v1/users", {
@@ -63,16 +80,14 @@ const leaveChatRoom = async (chatRoomId: number) => {
 
 const Chat = ({ params }: { params: { slug?: string[] } }) => {
   const [selectedChatRoom, setSelectedChatRoom] = useState<number | null>(null);
-  const [pastMessages, setPastMessages] = useState<{ [key: number]: any[] }>(
-    {},
-  );
-  const [newMessages, setNewMessages] = useState<{ [key: number]: any[] }>({});
+  const [pastMessages, setPastMessages] = useState<{ [key: number]: { nickname: string; content: string }[] }>({});
+  const [newMessages, setNewMessages] = useState<{ [key: number]: { nickname: string; message: string }[] }>({});
   const [newMessage, setNewMessage] = useState<string>("");
   const [currentUserNickname, setCurrentUserNickname] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const chatListRef = useRef<HTMLDivElement | null>(null); // 목록 스크롤 Ref
   const chatRoomRef = useRef<HTMLDivElement | null>(null);
-  const socketRef = useRef<any>(null);
+  const socketRef = useRef<ReturnType<typeof io> | null>(null);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -261,7 +276,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
             </div>
           </div>
           <ul className="flex flex-col px-[1rem] mx-auto">
-            {data?.chatRooms.map((chatRoom: any) => (
+            {data?.chatRooms.map((chatRoom: ChatRoom) => (
               <li
                 key={chatRoom.id}
                 className={`mb-4 border ${
@@ -276,9 +291,8 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
                   title={chatRoom.board.title}
                   tag={[chatRoom.board.category]}
                   date={chatRoom.board.date}
-                  time={chatRoom.board.start_time}
-                  currentCapacity={chatRoom.board.currentPerson}
-                  maxCapacity={chatRoom.board.max_capacity}
+                  currentPerson={chatRoom.board.currentPerson}
+                  maxCapacity={chatRoom.board.maxCapacity}
                   locationName={chatRoom.board.location.locationName}
                   status={chatRoom.board.status}
                   onClick={() => handleChatRoomClick(chatRoom.id)} // 클릭 시 스크롤 위치 저장 및 이동

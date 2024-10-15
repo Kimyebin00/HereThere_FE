@@ -52,7 +52,7 @@ const Boards = () => {
 
   const posts = data?.data || [];
   const totalPage = data?.totalPage || 0;
-  console.log(posts)
+  console.log(posts);
   useEffect(() => {
     console.log("Loading:", isLoading);
     console.log("Data:", posts);
@@ -125,7 +125,7 @@ const Boards = () => {
                 maxCapacity={data.maxCapacity}
                 locationName={data.location.locationName}
                 status={data.status}
-                currentCapacity={data.currentCapacity}
+                currentPerson={data.currentPerson}
                 link={`/post/${data.id}`}
               />
             ))}

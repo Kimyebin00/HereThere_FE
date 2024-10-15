@@ -141,8 +141,7 @@ const MyPage = () => {
                 title={data.title}
                 tag={[data.category]}
                 date={data.date}
-                time={data.start_time}
-                maxCapacity={data.max_capacity}
+                maxCapacity={data.maxCapacity}
                 locationName={data.location?.locationName || "위치 없음"}
                 status={data.status}
                 currentPerson={data.currentPerson}
@@ -163,8 +162,7 @@ const MyPage = () => {
                   title={data.title}
                   tag={[data.category]}
                   date={data.date}
-                  time={data.start_time}
-                  maxCapacity={data.max_capacity}
+                  maxCapacity={data.maxCapacity}
                   locationName={data.location?.locationName || "위치 없음"} // 위치가 없을 경우 기본값 설정
                   status={data.status} // status가 JSON에 없을 경우 수정 필요
                   currentPerson={data.currentPerson} // currentPerson이 JSON에 없을 경우 수정 필요

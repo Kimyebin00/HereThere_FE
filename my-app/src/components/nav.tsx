@@ -30,11 +30,7 @@ const navBar = () => {
               <Image src={write} alt="작성" />
             </Link>
           </li>
-          <li>
-            <Link href="/alarm">
-              <Image src={alarm} alt="알람" />
-            </Link>
-          </li>
+
           <li>
             <Link href="/mypage">
               <Image src={mypage} alt="마이 페이지" />

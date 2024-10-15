@@ -4,20 +4,23 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import StudyInCafeImage from "@/assets/previewImages/StudyInCafe.png";
+import CoffeeChatImage from "@/assets/previewImages/CoffeeChat.png";
+import BoardgameImage from "@/assets/previewImages/BoardGame.png";
+import NoImage from "@/assets/previewImages/NoImage.png";
 import LocationIcon from "@/assets/previewImages/LocationIcon.png";
 import TimeIcon from "@/assets/previewImages/TimeIcon.png";
 import PersonnelIcon from "@/assets/previewImages/PersonnelIcon.png";
+
 
 interface PostPreviewProps {
   boardId: number;
   title: string;
   tag: string[];
   date: string;
-  time: string;
   maxCapacity: number;
   locationName: string;
   status?: "OPEN" | "CLOSED";
-  currentCapacity: number;
+  currentPerson: number;
   link?: string; // 추가된 부분
   onClick?: () => void; // 추가된 부분
 }
@@ -29,16 +32,22 @@ const tagColors: { [key: string]: string } = {
   보드게임: "bg-yellow-100",
 };
 
+const categoryImages: { [key: string]: StaticImageData } = {
+  커피챗: CoffeeChatImage,
+  카공: StudyInCafeImage,
+  보드게임: BoardgameImage,
+  기타: NoImage, // 기타나 해당 카테고리가 없을 때는 NoImage를 사용
+};
+
 const PostPreview: React.FC<PostPreviewProps> = ({
   boardId,
   title,
   tag,
   date,
-  time,
   maxCapacity,
   locationName,
   status, // 기본값 설정
-  currentCapacity: initialCurrentPerson,
+  currentPerson: initialCurrentPerson,
   link,
   onClick,
 }) => {
@@ -71,30 +80,31 @@ const PostPreview: React.FC<PostPreviewProps> = ({
       ? tagColors[tag[0]] || "bg-lightgray"
       : "bg-lightgray";
 
-  const content = (
-    <div className="flex flex-row w-[30rem] xl:w-[32rem] h-32 bg-white rounded-3xl p-3 border border-1 border-lightgray cursor-pointer">
-      <Image
-        src={StudyInCafeImage}
-        alt="Study In Cafe Preview Image"
-        width={96}
-        height={96}
-        priority
-      />
-      <div className="ml-3">
-        <div className="flex justify-between items-center mb-1.5 w-[21rem] xl:w-[23rem]">
-          <p className={`w-fit ${tagColor} px-2.5 py-0.5 rounded-xl text-xs`}>
-            {tag && tag.length > 0 ? tag[0] : "알 수 없음"}
-          </p>
-          {status && (
-            <p
-              className={`flex items-center text-xs font-semibold ${
-                status === "OPEN" ? "text-green-500" : "text-red-500"
-              }`}
-            >
-              {status === "OPEN" ? "모집 중" : "모집 종료"}
+      const imageSrc =
+      tag && tag.length > 0 ? categoryImages[tag[0]] || NoImage : NoImage;
+  
+    const content = (
+      <div className="flex flex-row w-[30rem] xl:w-[32rem] h-32 bg-white rounded-3xl p-3 border border-1 border-lightgray cursor-pointer">
+        <Image
+          src={imageSrc} // 선택된 이미지 사용
+          alt="Preview Image"
+          priority
+        />
+        <div className="ml-3">
+          <div className="flex justify-between items-center mb-1.5 w-[21rem] xl:w-[23rem]">
+            <p className={`w-fit ${tagColor} px-2.5 py-0.5 rounded-xl text-xs`}>
+              {tag && tag.length > 0 ? tag[0] : "알 수 없음"}
             </p>
-          )}
-        </div>
+            {status && (
+              <p
+                className={`flex items-center text-xs font-semibold ${
+                  status === "OPEN" ? "text-green-500" : "text-red-500"
+                }`}
+              >
+                {status === "OPEN" ? "모집 중" : "모집 종료"}
+              </p>
+            )}
+          </div>
 
         <p className="text-base font-semibold mb-8">{title}</p>
         <div className="flex flex-row">
@@ -106,7 +116,7 @@ const PostPreview: React.FC<PostPreviewProps> = ({
               height={18}
               priority
             />
-            <span className="text-xs ml-1 text-gray-500">{`${locationName}`}</span>
+            <span className="text-xs ml-1 text-gray-500 truncate w-[9rem] xl:w-[11rem]">{`${locationName}`}</span>
           </div>
           <div className="flex flex-row mr-3 items-center">
             <Image
