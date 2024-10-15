@@ -1,23 +1,15 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import title from "@/assets/nav/title.svg";
 import { CgAdd } from "react-icons/cg";
 import { VscAccount } from "react-icons/vsc";
-import { IoIosLogOut } from "react-icons/io";
-import icons_chat from "@/assets/chat/icons_chat.svg";
-import Sidebar from "@/components/SideBar";
 
 const useSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [currentSidebarTab, setCurrentSidebarTab] = useState(null);
+  const [currentSidebarTab, setCurrentSidebarTab] = useState<string>("");
 
   const watchScreen = () => {
     if (window.innerWidth <= 1024) {
@@ -47,8 +39,6 @@ const NavBarWeb: React.FC = () => {
     currentSidebarTab,
     setCurrentSidebarTab,
   } = useSidebar();
-
-  const router = useRouter();
 
   const handleSidebarToggle = (tab: string) => {
     if (isSidebarOpen && currentSidebarTab === tab) {

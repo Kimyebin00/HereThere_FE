@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Logo from "@/assets/Logo.svg";
-import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
 
 const redirectUri = "http://localhost:8000/api/v1/auth/redirect";
 const scope = ["profile_nickname"].join(",");

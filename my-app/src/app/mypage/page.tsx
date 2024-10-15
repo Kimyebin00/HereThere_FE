@@ -1,15 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useEffect } from "react";
 import Image from "next/image";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios"; // axios 수정
-
 import { Board } from "@/types/boards";
-
 import thumbnail from "@/assets/mypage/thumbnail.svg";
-import location from "@/assets/mypage/ion_location.svg";
 import pencil from "@/assets/mypage/pencil.svg";
 import PostPreview from "@/components/PostPreview";
 
@@ -33,23 +29,6 @@ const MyPage = () => {
     console.log("Loading:", isLoading);
     console.log("Data:", mypageData);
   }, [isLoading, mypageData]);
-
-  //로그아웃 함수
-  const handleLogout = async () => {
-    try {
-      await axios.post(
-        "http://localhost:8000/api/v1/auth/logout",
-        {},
-        {
-          withCredentials: true,
-        },
-      );
-      // 로그아웃 성공 후 로그인 페이지로 리다이렉트
-      window.location.href = "/login"; // 로그인 페이지로 이동
-    } catch (error) {
-      console.error("로그아웃 중 오류 발생:", error);
-    }
-  };
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
@@ -78,7 +57,6 @@ const MyPage = () => {
           const cookie = cookies[i];
           const eqPos = cookie.indexOf("=");
           const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-          // 쿠키의 유효기간을 과거로 설정하여 쿠키를 삭제
           document.cookie =
             name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
         }
@@ -91,25 +69,24 @@ const MyPage = () => {
       deleteAllCookies();
 
       // 로그아웃 후 로그인 페이지로 이동
-      router.push("/login");
+      window.location.href = "/login";
     },
     onError: error => {
       console.error("로그아웃 중 오류 발생:", error.message);
     },
   });
 
-  const kakaoLogoutHandler = () => {
-    // 로그아웃 요청
-    logoutMutation.mutate();
+  const handleLogout = () => {
+    logoutMutation.mutate(); // 로그아웃 함수 호출
   };
 
   return (
     <main className="flex">
       <div className="container flex flex-col max-w-full min-h-screen items-center bg-white">
-        <div className="namecontainer flex box-border w-[30rem] mt-[2rem] xl:w-[50rem] xl:ml-[-15rem] lg:w-[45rem] lg:ml-0 md:w-[40rem] md:ml-0 ">
+        <div className="namecontainer flex box-border w-[30rem] mt-[2rem] xl:w-[50rem] xl:ml-[-15rem] lg:w-[45rem] lg:ml-0 md:w-[40rem] md:ml-0">
           <Image src={thumbnail} alt="썸네일" />
           <div className="m-[2rem]">
-            <div className="flex mb-[1rem] ">
+            <div className="flex mb-[1rem]">
               <h1 className="nickname text-[1.5rem] font-bold mr-[0.5rem]">
                 {mypageData?.username || "이름"}
               </h1>
@@ -117,14 +94,6 @@ const MyPage = () => {
                 <Image src={pencil} alt="편집" />
               </button>
             </div>
-
-            {/* <Link
-              className="flex items-center text-gray text-[1rem] "
-              href="/location"
-            >
-              <Image src={location} alt="위치 아이콘" />
-              <ins>위치 정보를 입력하세요.</ins>
-            </Link> */}
           </div>
         </div>
 
@@ -175,7 +144,7 @@ const MyPage = () => {
         {/* 로그아웃 버튼 추가 */}
         <button
           onClick={handleLogout}
-       className="w-[22.5rem] h-[3rem] rounded-[0.25rem] mb-7 bg-[lightpink] hover:bg-darkpink"
+          className="w-[22.5rem] h-[3rem] rounded-[0.25rem] mb-7 bg-[lightpink] hover:bg-darkpink"
         >
           <span className="text-base text-white font-semibold">로그아웃</span>
         </button>
