@@ -17,7 +17,7 @@ const Write = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>();
   const [view, setView] = useState(false);
   const [person, setPerson] = useState<number>();
-  const [category, setCategory] = useState<String>();
+  const [category, setCategory] = useState<string>();
   const personItems = Array.from({ length: 14 }, (_, index) => index + 2);
   const [lat, setLat] = useState<number>(0);
   const [lng, setLng] = useState<number>(0);
@@ -34,16 +34,13 @@ const Write = () => {
     }
   }
   const mutation = useMutation({
-    mutationFn: async (newPost) => {
-      const res = await api.post('/api/v1/boards', 
-        newPost, 
-        {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+    mutationFn: async newPost => {
+      const res = await api.post('/api/v1/boards', newPost, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       return res.data;
     },
@@ -135,7 +132,7 @@ const Write = () => {
             return;
           }
 
-          ps.keywordSearch(keyword, function (data: any[], status: string) {
+          ps.keywordSearch(keyword, function (data: object[], status: string) {
             resultList.classList.add(
               "h-[18rem]",
               "bg-white",
@@ -157,7 +154,7 @@ const Write = () => {
         function displayPlaces(places: any[]) {
           resultList.innerHTML = "";
 
-          places.forEach(function (place) {
+          places.forEach((place: object) => {
             const listItem = document.createElement("div");
             listItem.className =
               "result-item h-16 flex flex-col justify-center";

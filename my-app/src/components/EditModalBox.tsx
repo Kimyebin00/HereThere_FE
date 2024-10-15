@@ -22,27 +22,24 @@ const EditModalBox = ({ postData, clickModal }): EditModalBoxProps => {
   );
   const [view, setView] = useState(false);
   const [person, setPerson] = useState<number>(postData.maxCapacity);
-  const [category, setCategory] = useState<String>(postData.category);
+  const [category, setCategory] = useState<string>(postData.category);
   const personItems = Array.from({ length: 14 }, (_, index) => index + 2);
   const [lat, setLat] = useState<number>(postData.location?.latitude);
   const [lng, setLng] = useState<number>(postData.location?.longitude);
   const [isHovered, setIsHovered] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: async (editedPost) => {
-      const res = await api.patch(`/api/v1/boards/${postData.id}`,
-        editedPost, 
-        {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+    mutationFn: async editedPost => {
+      const res = await api.patch(`/api/v1/boards/${postData.id}`, editedPost, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
       return res.data;
     },
-    onSuccess: data => {
+    onSuccess: () => {
       clickModal();
       location.reload();
     },
@@ -111,7 +108,7 @@ const EditModalBox = ({ postData, clickModal }): EditModalBoxProps => {
   }, [view]);
 
   useEffect(() => {
-    const calendarHeader = document.getElementsByClassName("react-datepicker__header ");
+    const calendarHeader = document.getElementsByClassName("react-datepicker__header ",);
     console.log(calendarHeader);
     // calendarHeader[0].classList.add("bg-pink");
 
@@ -123,7 +120,6 @@ const EditModalBox = ({ postData, clickModal }): EditModalBoxProps => {
 
     const onLoadKakaoAPI = () => {
       window.kakao.maps.load(() => {
-
         const ps = new window.kakao.maps.services.Places();
         const keywordInput = document.getElementById(
           "location",
@@ -131,7 +127,6 @@ const EditModalBox = ({ postData, clickModal }): EditModalBoxProps => {
         const resultList = document.getElementById(
           "result-list",
         ) as HTMLElement;
-
 
         keywordInput.addEventListener("keyup", function () {
           const keyword = keywordInput.value;
@@ -149,7 +144,7 @@ const EditModalBox = ({ postData, clickModal }): EditModalBoxProps => {
             return;
           }
 
-          ps.keywordSearch(keyword, function (data: any[], status: string) {
+          ps.keywordSearch(keyword, function (data: object[], status: string) {
             resultList.classList.add(
               "h-[18rem]",
               "bg-white",
@@ -168,7 +163,7 @@ const EditModalBox = ({ postData, clickModal }): EditModalBoxProps => {
           });
         });
 
-        function displayPlaces(places: any[]) {
+        function displayPlaces(places: object[]) {
           resultList.innerHTML = "";
 
           places.forEach(function (place) {
@@ -242,18 +237,17 @@ const EditModalBox = ({ postData, clickModal }): EditModalBoxProps => {
             className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-11 w-full px-4 py-2.5 font-semibold text-sm"
           />
           <div className="flex md:flex-row flex-col justify-between w-full relative">
-          <DatePicker
-            dateFormat="yyyy / MM / dd"
-            shouldCloseOnSelect
-            minDate={new Date()}
-            selected={selectedDate}
-            onChange={date => setSelectedDate(date)}
-            placeholderText="날짜를 선택해주세요."
-            className="placeholder:text-zinc-500 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] z-30 h-11 w-full px-4 py-2.5 font-semibold text-sm"
-            calendarClassName="bg-pink"
-            withPortal
-          />
-            
+            <DatePicker
+              dateFormat="yyyy / MM / dd"
+              shouldCloseOnSelect
+              minDate={new Date()}
+              selected={selectedDate}
+              onChange={date => setSelectedDate(date)}
+              placeholderText="날짜를 선택해주세요."
+              className="placeholder:text-zinc-500 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] z-30 h-11 w-full px-4 py-2.5 font-semibold text-sm"
+              calendarClassName="bg-pink"
+              withPortal
+            />
             <div className="flex md:flex-row justify-between md:mt-0 mt-4">
               <input
                 type="time"

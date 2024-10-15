@@ -1,6 +1,6 @@
 type sendChatProps = {
-  "chatRoomId": Number,
-  "content": string
-}
+  chatRoomId: number;
+  content: string;
+};
 
 export default sendChatProps;

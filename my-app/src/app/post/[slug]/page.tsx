@@ -14,27 +14,22 @@ declare global {
     kakao: any;
   }
 }
-const getPostData = async id => {
-  const res = await api.get(`/api/v1/boards/${id}`, 
-    { withCredentials: true }
-  );
-  console.log(res.data)
+const getPostData = async (id: number) => {
+  const res = await api.get(`/api/v1/boards/${id}`, { withCredentials: true });
+
   return res.data;
 };
 
 const Post = ({ params }: { params: { slug: number } }) => {
-  const [currentPerson, setCurrentPerson] = useState<Number>(1);
-  const [locationAddress, setLocationAddress] = useState<String>("");
+  const [currentPerson, setCurrentPerson] = useState<number>(1);
+  const [locationAddress, setLocationAddress] = useState<string>("");
   //const [postData, setPostData] = useState<Object>({});
   const [showModal, setShowModal] = useState(false);
   // let locationAddress = ""
   const router = useRouter();
 
   const deletePostData = async id => {
-    const res = await api.delete(
-      `/api/v1/boards/${id}`,
-      { withCredentials: true }
-    );
+    const res = await api.delete(`/api/v1/boards/${id}`, { withCredentials: true });
 
     return res.data;
   };
@@ -48,8 +43,6 @@ const Post = ({ params }: { params: { slug: number } }) => {
 
     return res.data;
   };
-
-  
 
   // const getMutation = useMutation({
   //   mutationFn: getPostData,
@@ -65,7 +58,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
 
   const deleteMutation = useMutation({
     mutationFn: deletePostData,
-    onSuccess: data => {
+    onSuccess: () => {
       router.push(`/`);
     },
     onError: error => {
@@ -80,7 +73,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
     },
     onError: error => {
       console.log(error.message);
-    }
+    },
   });
 
   const clickEditButton = () => {
@@ -116,7 +109,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
             marker: marker,
           };
 
-        const staticMap = new window.kakao.maps.StaticMap(
+        new window.kakao.maps.StaticMap(
           staticMapContainer,
           staticMapOption,
         );
@@ -137,13 +130,14 @@ const Post = ({ params }: { params: { slug: number } }) => {
     kakaoMapScript.addEventListener("load", onLoadKakaoAPI);
   };
 
-  const { data, isSuccess, error, isLoading } = useQuery({
-    queryKey: ['postData', params.slug],
+  const { data, isSuccess } = useQuery({
+    queryKey: ["postData", params.slug],
     queryFn: () => getPostData(params.slug),
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     retry: 1,
-    },
+  },
+
     // onSuccess: data => {
     //   setPostData(data);
     //   setCurrentPerson(data.currentCapacity);
@@ -153,7 +147,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
     //   console.log(error.message);
     // },
   );
-    console.log(data)
+
   const postData = data || {};
 
   useEffect(() => {

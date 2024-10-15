@@ -4,10 +4,7 @@ import "../styles/globals.css";
 import ReactQueryProviders from "@/utils/react-query-provider";
 import WebNavBar from "@/components/navweb";
 import MobileNavBar from "@/components/nav";
-import Sidebar from "@/components/Sidebar";
 import Script from "next/script";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "요기조기",
