@@ -112,7 +112,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
           marker: marker,
         };
 
-        new window.kakao.maps.StaticMap(staticMapContainer, staticMapOption,);
+        new window.kakao.maps.StaticMap(staticMapContainer, staticMapOption);
 
         const geocoder = new window.kakao.maps.services.Geocoder();
         console.log(postData.location?.longitude);
@@ -156,7 +156,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
       loadKakaoMap(postData.location.latitude, postData.location.longitude);
     }
   }, [isSuccess, postData]);
-  
+
   //loadKakaoMap(data?.location.latitude, data?.location.longitude);
 
   useEffect(() => {
