@@ -80,10 +80,10 @@ const leaveChatRoom = async (chatRoomId: number) => {
 const Chat = ({ params }: { params: { slug?: string[] } }) => {
   const [selectedChatRoom, setSelectedChatRoom] = useState<number | null>(null);
   const [pastMessages, setPastMessages] = useState<{
-    [key: number]: { nickname: string; content: string }[]
+    [key: number]: { nickname: string; content: string }[];
   }>({});
   const [newMessages, setNewMessages] = useState<{
-    [key: number]: { nickname: string; message: string }[]
+    [key: number]: { nickname: string; message: string }[];
   }>({});
   const [newMessage, setNewMessage] = useState<string>("");
   const [currentUserNickname, setCurrentUserNickname] = useState<string>("");

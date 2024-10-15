@@ -104,16 +104,15 @@ const Post = ({ params }: { params: { slug: number } }) => {
           position: position,
         };
 
-        const staticMapContainer = document.getElementById("staticMap"), staticMapOption = {
+        const staticMapContainer = document.getElementById("staticMap");
+
+        const staticMapOption = {
           center: position,
           level: 3,
           marker: marker,
         };
 
-        new window.kakao.maps.StaticMap(
-          staticMapContainer,
-          staticMapOption,
-        );
+        new window.kakao.maps.StaticMap(staticMapContainer, staticMapOption,);
 
         const geocoder = new window.kakao.maps.services.Geocoder();
         console.log(postData.location?.longitude);
@@ -137,16 +136,16 @@ const Post = ({ params }: { params: { slug: number } }) => {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     retry: 1,
-  },);
+  });
 
-    // onSuccess: data => {
-    //   setPostData(data);
-    //   setCurrentPerson(data.currentCapacity);
-    //   loadKakaoMap(data.location.latitude, data.location.longitude);
-    // },
-    // onError: error => {
-    //   console.log(error.message);
-    // },
+  // onSuccess: data => {
+  //   setPostData(data);
+  //   setCurrentPerson(data.currentCapacity);
+  //   loadKakaoMap(data.location.latitude, data.location.longitude);
+  // },
+  // onError: error => {
+  //   console.log(error.message);
+  // },
   //);
 
   const postData = data || {};

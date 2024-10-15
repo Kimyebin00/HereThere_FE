@@ -81,7 +81,7 @@ const PostPreview: React.FC<PostPreviewProps> = ({
 
   const imageSrc =
     tag && tag.length > 0 ? categoryImages[tag[0]] || NoImage : NoImage;
-  
+
   const content = (
     <div className="flex flex-row w-[30rem] xl:w-[32rem] h-32 bg-white rounded-3xl p-3 border border-1 border-lightgray cursor-pointer">
       <Image
