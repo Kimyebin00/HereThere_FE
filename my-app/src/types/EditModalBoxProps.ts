@@ -10,13 +10,13 @@ type postData = {
   user: {
     userId: number;
     username: string;
-  },
+  };
   location: {
     id: number;
     latitude: number;
     longitude: number;
     locationName: string;
-  },
+  };
   createdAt: string;
   updatedAt: string;
   deletedAt: null;

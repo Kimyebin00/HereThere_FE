@@ -113,7 +113,6 @@ const NavBarWeb: React.FC = () => {
           </button>
           {/* <Sidebar /> */}
         </Link>
-        
       </div>
 
       <div className="h-96 mt-80 flex flex-col justify-around items-center mb-[4rem]">

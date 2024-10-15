@@ -29,7 +29,9 @@ const Post = ({ params }: { params: { slug: number } }) => {
   const router = useRouter();
 
   const deletePostData = async id => {
-    const res = await api.delete(`/api/v1/boards/${id}`, { withCredentials: true });
+    const res = await api.delete(`/api/v1/boards/${id}`, {
+      withCredentials: true,
+    });
 
     return res.data;
   };
@@ -102,12 +104,11 @@ const Post = ({ params }: { params: { slug: number } }) => {
           position: position,
         };
 
-        const staticMapContainer = document.getElementById("staticMap"),
-          staticMapOption = {
-            center: position,
-            level: 3,
-            marker: marker,
-          };
+        const staticMapContainer = document.getElementById("staticMap"), staticMapOption = {
+          center: position,
+          level: 3,
+          marker: marker,
+        };
 
         new window.kakao.maps.StaticMap(
           staticMapContainer,
@@ -136,7 +137,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     retry: 1,
-  },
+  },);
 
     // onSuccess: data => {
     //   setPostData(data);
@@ -146,7 +147,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
     // onError: error => {
     //   console.log(error.message);
     // },
-  );
+  //);
 
   const postData = data || {};
 

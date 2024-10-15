@@ -11,7 +11,6 @@ import LocationIcon from "@/assets/previewImages/LocationIcon.png";
 import TimeIcon from "@/assets/previewImages/TimeIcon.png";
 import PersonnelIcon from "@/assets/previewImages/PersonnelIcon.png";
 
-
 interface PostPreviewProps {
   boardId: number;
   title: string;
@@ -80,32 +79,31 @@ const PostPreview: React.FC<PostPreviewProps> = ({
       ? tagColors[tag[0]] || "bg-lightgray"
       : "bg-lightgray";
 
-      const imageSrc =
-      tag && tag.length > 0 ? categoryImages[tag[0]] || NoImage : NoImage;
+  const imageSrc =
+    tag && tag.length > 0 ? categoryImages[tag[0]] || NoImage : NoImage;
   
-    const content = (
-      <div className="flex flex-row w-[30rem] xl:w-[32rem] h-32 bg-white rounded-3xl p-3 border border-1 border-lightgray cursor-pointer">
-        <Image
-          src={imageSrc} // 선택된 이미지 사용
-          alt="Preview Image"
-          priority
-        />
-        <div className="ml-3">
-          <div className="flex justify-between items-center mb-1.5 w-[21rem] xl:w-[23rem]">
-            <p className={`w-fit ${tagColor} px-2.5 py-0.5 rounded-xl text-xs`}>
-              {tag && tag.length > 0 ? tag[0] : "알 수 없음"}
+  const content = (
+    <div className="flex flex-row w-[30rem] xl:w-[32rem] h-32 bg-white rounded-3xl p-3 border border-1 border-lightgray cursor-pointer">
+      <Image
+        src={imageSrc} // 선택된 이미지 사용
+        alt="Preview Image"
+        priority
+      />
+      <div className="ml-3">
+        <div className="flex justify-between items-center mb-1.5 w-[21rem] xl:w-[23rem]">
+          <p className={`w-fit ${tagColor} px-2.5 py-0.5 rounded-xl text-xs`}>
+            {tag && tag.length > 0 ? tag[0] : "알 수 없음"}
+          </p>
+          {status && (
+            <p
+              className={`flex items-center text-xs font-semibold ${
+                status === "OPEN" ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              {status === "OPEN" ? "모집 중" : "모집 종료"}
             </p>
-            {status && (
-              <p
-                className={`flex items-center text-xs font-semibold ${
-                  status === "OPEN" ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {status === "OPEN" ? "모집 중" : "모집 종료"}
-              </p>
-            )}
-          </div>
-
+          )}
+        </div>
         <p className="text-base font-semibold mb-8">{title}</p>
         <div className="flex flex-row">
           <div className="flex flex-row mr-3 items-center">
@@ -153,4 +151,5 @@ const PostPreview: React.FC<PostPreviewProps> = ({
 
   return <div onClick={onClick}>{content}</div>;
 };
+
 export default PostPreview;

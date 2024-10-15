@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import ConfirmModal from "@/components/ConfirmModal";
 import sendChatProps from "@/types/chat";
 
-
 interface ChatRoom {
   id: number;
   board: {
@@ -80,8 +79,12 @@ const leaveChatRoom = async (chatRoomId: number) => {
 
 const Chat = ({ params }: { params: { slug?: string[] } }) => {
   const [selectedChatRoom, setSelectedChatRoom] = useState<number | null>(null);
-  const [pastMessages, setPastMessages] = useState<{ [key: number]: { nickname: string; content: string }[] }>({});
-  const [newMessages, setNewMessages] = useState<{ [key: number]: { nickname: string; message: string }[] }>({});
+  const [pastMessages, setPastMessages] = useState<{
+    [key: number]: { nickname: string; content: string }[]
+  }>({});
+  const [newMessages, setNewMessages] = useState<{
+    [key: number]: { nickname: string; message: string }[]
+  }>({});
   const [newMessage, setNewMessage] = useState<string>("");
   const [currentUserNickname, setCurrentUserNickname] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);

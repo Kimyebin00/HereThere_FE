@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import ReactQueryProviders from "@/utils/react-query-provider";
 import WebNavBar from "@/components/navweb";

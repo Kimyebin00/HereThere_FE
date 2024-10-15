@@ -1,11 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-
 import main from "../assets/nav/main.svg";
 import main_hover from "../assets/nav/main_hover.svg";
 import chat from "../assets/nav/chat.svg";
-import alarm from "../assets/nav/alarm.svg";
 import write from "../assets/nav/write.svg";
 import mypage from "../assets/nav/mypage.svg";
 
@@ -30,7 +28,6 @@ const navBar = () => {
               <Image src={write} alt="작성" />
             </Link>
           </li>
-
           <li>
             <Link href="/mypage">
               <Image src={mypage} alt="마이 페이지" />

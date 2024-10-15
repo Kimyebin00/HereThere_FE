@@ -35,7 +35,7 @@ const Write = () => {
   }
   const mutation = useMutation({
     mutationFn: async newPost => {
-      const res = await api.post('/api/v1/boards', newPost, {
+      const res = await api.post("/api/v1/boards", newPost, {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
