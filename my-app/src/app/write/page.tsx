@@ -151,7 +151,7 @@ const Write = () => {
           });
         });
 
-        function displayPlaces(places: any[]) {
+        function displayPlaces(places: object[]) {
           resultList.innerHTML = "";
 
           places.forEach((place: object) => {

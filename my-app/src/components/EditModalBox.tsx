@@ -108,9 +108,10 @@ const EditModalBox = ({ postData, clickModal }): EditModalBoxProps => {
   }, [view]);
 
   useEffect(() => {
-    const calendarHeader = document.getElementsByClassName("react-datepicker__header ",
+    const calendarHeader = document.getElementsByClassName(
+      "react-datepicker__header ",
     );
-    
+
     console.log(calendarHeader);
     // calendarHeader[0].classList.add("bg-pink");
 
