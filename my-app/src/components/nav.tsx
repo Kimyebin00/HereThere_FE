@@ -1,11 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import main from "../assets/nav/main.svg";
-import main_hover from "../assets/nav/main_hover.svg";
-import chat from "../assets/nav/chat.svg";
-import write from "../assets/nav/write.svg";
-import mypage from "../assets/nav/mypage.svg";
+
+import { CgAdd } from "react-icons/cg";
+import { VscAccount } from "react-icons/vsc";
 
 const navBar = () => {
   return (
@@ -13,24 +10,54 @@ const navBar = () => {
       <div className=" w-full bg-white"></div>
       <nav>
         <ul className="fixed bottom-0 w-screen min-h-14 bg-white md:hidden flex flex-row justify-around items-center border-t">
-          <li>
+          <li className={` hover:text-darkpink `}>
             <Link href="/boards">
-              <Image src={main ? main_hover : main} alt="메인게시판" />
+              <svg
+                aria-hidden="true"
+                className="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h7"
+                ></path>
+              </svg>
             </Link>
           </li>
-          <li>
+
+          <li className={` hover:text-darkpink `}>
             <Link href="/chat">
-              <Image className="" src={chat} alt="채팅" />
-            </Link>
-          </li>{" "}
-          <li>
-            <Link href="/write">
-              <Image src={write} alt="작성" />
+              <svg
+                aria-hidden="true"
+                className="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                ></path>
+              </svg>
             </Link>
           </li>
-          <li>
+
+          <li className={` hover:text-darkpink `}>
+            <Link href="/write">
+              <CgAdd className="w-7 h-7" />
+            </Link>
+          </li>
+          <li className={` hover:text-darkpink `}>
             <Link href="/mypage">
-              <Image src={mypage} alt="마이 페이지" />
+              <VscAccount className="w-6 h-6" />
             </Link>
           </li>
         </ul>

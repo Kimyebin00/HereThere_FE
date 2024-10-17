@@ -111,7 +111,6 @@ const NavBarWeb: React.FC = () => {
               ></path>
             </svg>
           </button>
-          {/* <Sidebar /> */}
         </Link>
       </div>
 

@@ -8,13 +8,29 @@ import Logo from "@/assets/Logo.svg";
 const redirectUri = "http://localhost:8000/api/v1/auth/redirect";
 const scope = ["profile_nickname"].join(",");
 
+// Kakao 객체의 타입을 명확히 선언
+interface KakaoSDK {
+  init: (key: string) => void;
+  isInitialized: () => boolean;
+  Auth: {
+    authorize: (options: { redirectUri: string; scope: string }) => void;
+  };
+}
+
+// window 객체에 Kakao가 있음을 선언 (타입스크립트에 명확히 알림)
+declare global {
+  interface Window {
+    Kakao?: KakaoSDK;
+  }
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const [isKakaoInitialized, setIsKakaoInitialized] = useState(false);
 
   useEffect(() => {
     const loadKakaoSDK = () => {
-      return new Promise((resolve, reject) => {
+      return new Promise<KakaoSDK | undefined>((resolve, reject) => {
         if (typeof window === "undefined") return;
         if (window.Kakao) return resolve(window.Kakao);
 
@@ -37,12 +53,9 @@ export default function LoginPage() {
 
     loadKakaoSDK()
       .then(Kakao => {
-        if (!Kakao.isInitialized()) {
-          // 환경 변수가 제대로 로드되는지 확인
-          // console.log("Kakao JS Key:", process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
-
+        if (Kakao && !Kakao.isInitialized()) {
           // Kakao SDK 초기화
-          Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+          Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY!);
 
           // 초기화 여부 확인
           if (Kakao.isInitialized()) {
@@ -57,14 +70,17 @@ export default function LoginPage() {
   }, []);
 
   const kakaoLoginHandler = () => {
-    //로그인 요청
-    window.Kakao.Auth.authorize({
-      redirectUri,
-      scope,
-    });
-
-    console.log("카카오 로그인 요청");
-    router.replace("/boards");
+    // 로그인 요청
+    if (window.Kakao) {
+      window.Kakao.Auth.authorize({
+        redirectUri,
+        scope,
+      });
+      console.log("카카오 로그인 요청");
+      router.replace("/boards");
+    } else {
+      console.error("Kakao SDK가 초기화되지 않았습니다.");
+    }
   };
 
   return (

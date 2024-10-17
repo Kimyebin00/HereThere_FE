@@ -3,21 +3,27 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import axios from "axios"; // axios 수정
+import api from "@/utils/api";
 import { Board } from "@/types/boards";
 import thumbnail from "@/assets/mypage/thumbnail.svg";
 import pencil from "@/assets/mypage/pencil.svg";
 import PostPreview from "@/components/PostPreview";
+import { useRouter } from "next/navigation";
 
 const getMypageData = async () => {
-  const res = await axios.get("http://localhost:8000/api/v1/users/", {
+  const res = await api.get("/api/v1/users/", {
     withCredentials: true,
   });
   return res.data; // 수정: 전체 데이터를 반환
 };
 
 const MyPage = () => {
-  const { data: mypageData, isLoading } = useQuery({
+  const router = useRouter();
+  const {
+    data: mypageData,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["mypage"],
     queryFn: getMypageData,
     refetchOnWindowFocus: false,
@@ -26,14 +32,19 @@ const MyPage = () => {
   });
 
   useEffect(() => {
+    if (isLoading) return; // 데이터 로딩 중일 때는 아무 작업도 하지 않음.
+    if (isError) {
+      alert("로그인 후 이용 가능합니다.");
+      router.push("/login");
+    }
     console.log("Loading:", isLoading);
     console.log("Data:", mypageData);
-  }, [isLoading, mypageData]);
+  }, [isError, isLoading, mypageData, router]);
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/auth/logout",
+      const res = await api.post(
+        "/api/v1/auth/logout",
         {},
         {
           withCredentials: true,
@@ -102,7 +113,7 @@ const MyPage = () => {
         <div className="flex flex-col mx-[9rem] w-[30rem] h-full xl:w-[67.75rem] lg:w-[50rem] md:w-[40rem]">
           <h1 className="mb-[2rem] text-[20px]">작성한 게시글</h1>
 
-          <div className="write_post overflow-y-hidden grid grid-cols-1 xl:grid-cols-2 gap-4 xl:gap-6 py-[1.5rem]">
+          <div className="write_post overflow-y-hidden grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-8 p-[1.5rem]">
             {mypageData?.createdBoards?.data.map((data: Board) => (
               <PostPreview
                 key={data.id}
@@ -120,7 +131,7 @@ const MyPage = () => {
           </div>
 
           <h1 className="mt-[2rem] mb-[2rem] text-[20px]">참여한 게시글</h1>
-          <div className="write_post flex flex-col justify-center overflow-y-hidden">
+          <div className="write_post overflow-y-hidden grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-8 py-[2rem]">
             {mypageData?.joinedBoards?.data.length === 0 ? (
               <div>참여한 게시글이 없습니다.</div>
             ) : (
@@ -144,7 +155,7 @@ const MyPage = () => {
         {/* 로그아웃 버튼 추가 */}
         <button
           onClick={handleLogout}
-          className="w-[22.5rem] h-[3rem] rounded-[0.25rem] mb-7 bg-[lightpink] hover:bg-darkpink"
+          className="md:w-[22.5rem] md:h-[3rem] md:rounded-[0.25rem] md:mb-7 w-[8rem] h-[2rem] rounded-[1rem]  bg-[lightpink] hover:bg-darkpink absolute top-[4rem] right-[6rem] md:static md:top-auto md:right-auto md:mr-0"
         >
           <span className="text-base text-white font-semibold">로그아웃</span>
         </button>

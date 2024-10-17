@@ -8,6 +8,9 @@ import Script from "next/script";
 export const metadata: Metadata = {
   title: "요기조기",
   description: "모두모여! 요기조기!",
+  icons: {
+    icon: "icons/logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -18,7 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+        {/* Kakao SDK Script */}
+        <Script
+          src="https://developers.kakao.com/sdk/js/kakao.min.js"
+          strategy="beforeInteractive" // 스크립트를 페이지 렌더링 전에 비동기적으로 로드
+        />
       </head>
       <body className="flex md:flex-row flex-col">
         <Script
@@ -36,7 +43,10 @@ export default function RootLayout({
         <div className="h-1/6">
           <MobileNavBar />
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"
+          strategy="lazyOnload" // 페이지 로드 후 스크립트 로드
+        />
       </body>
     </html>
   );
