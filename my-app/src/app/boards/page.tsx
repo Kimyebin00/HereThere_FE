@@ -121,7 +121,6 @@ const Boards = () => {
                 title={data.title}
                 tag={[data.category]}
                 date={data.date}
-                time={data.startTime}
                 maxCapacity={data.maxCapacity}
                 locationName={data.location.locationName}
                 status={data.status}
