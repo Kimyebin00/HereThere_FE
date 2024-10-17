@@ -139,7 +139,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
     mutationFn: leaveChatRoom,
     onSuccess: () => {
       router.push("/chat"); // 채팅방을 나가면 기본 채팅 경로로 리다이렉트
-      queryClient.invalidateQueries(["chatRooms"]);
+      queryClient.invalidateQueries({ queryKey: ["chatRooms"] });
     },
   });
 
