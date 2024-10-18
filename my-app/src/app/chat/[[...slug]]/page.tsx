@@ -386,7 +386,9 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
                   className="h-[3rem] mr-[1rem] border border-lightgray rounded-lg px-4 w-full"
                   placeholder="메시지를 입력하세요..."
                   value={newMessage}
-                  onChange={(e: React.KeyboardEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
+                  onChange={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                    setNewMessage(e.target.value)
+                  }
                   onKeyPress={handleKeyPress}
                 />
                 <button
