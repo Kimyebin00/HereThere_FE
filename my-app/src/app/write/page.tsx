@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { requestPostData, responsePostData } from "@/types/write";
 
 declare global {
   interface Window {
@@ -26,7 +27,7 @@ const Write = () => {
   const router = useRouter();
 
   // 자식 노드를 모두 삭제하는 함수
-  function removeAllResultItems(parent, child) {
+  function removeAllResultItems(parent: HTMLElement, child: string) {
     if (parent) {
       const resultItems = parent.getElementsByClassName(child);
       while (resultItems.length > 0) {
@@ -35,7 +36,7 @@ const Write = () => {
     }
   }
   const mutation = useMutation({
-    mutationFn: async newPost => {
+    mutationFn: async (newPost: requestPostData) => {
       const res = await api.post("/api/v1/boards", newPost, {
         withCredentials: true,
         headers: {
@@ -45,9 +46,10 @@ const Write = () => {
 
       return res.data;
     },
-    onSuccess: data => {
+    onSuccess: (data: responsePostData) => {
       router.push(`/post/${data.id}`);
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: error => {
       console.log(error.message);
     },
@@ -88,13 +90,13 @@ const Write = () => {
 
     if (view) {
       personList?.classList.remove("hidden");
-      Array.from(personListItems).forEach(item => {
+      Array.from(personListItems).forEach((item: Element) => {
         item.classList.remove("hidden");
       });
     }
     if (!view) {
       personList?.classList.add("hidden");
-      Array.from(personListItems).forEach(item => {
+      Array.from(personListItems).forEach((item: Element) => {
         item.classList.add("hidden");
       });
     }
@@ -133,6 +135,7 @@ const Write = () => {
             return;
           }
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ps.keywordSearch(keyword, function (data: object[], status: string) {
             resultList.classList.add(
               "h-[18rem]",
@@ -152,9 +155,11 @@ const Write = () => {
           });
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         function displayPlaces(places: object[]) {
           resultList.innerHTML = "";
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           places.forEach((place: object) => {
             const listItem = document.createElement("div");
             listItem.className =
@@ -210,7 +215,7 @@ const Write = () => {
             withPortal
             minDate={new Date()}
             selected={selectedDate}
-            onChange={date => setSelectedDate(date)}
+            onChange={(date: Date) => setSelectedDate(date)}
             placeholderText="날짜를 선택해주세요."
             className="placeholder:text-zinc-500 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-11 w-full px-4 py-2.5 font-semibold text-sm"
             calendarClassName="bg-pink"
@@ -230,7 +235,7 @@ const Write = () => {
                     : "border-pink border-[1.5px]"
                 }`}
                 onClick={() => {
-                  setView(prev => !prev);
+                  setView((prev: boolean) => !prev);
                 }}
               >
                 {person === undefined ? "인원 선택" : `${person}명`}
@@ -244,7 +249,7 @@ const Write = () => {
                     <div
                       key={index}
                       onClick={() => {
-                        setView(prev => !prev);
+                        setView((prev: boolean) => !prev);
                         setPerson(item);
                       }}
                       className="person-item hidden hover:text-darkpink cursor-pointer w-full flex bg-white h-9 items-center justify-center py-2.5 font-semibold text-sm text-zinc-500"
