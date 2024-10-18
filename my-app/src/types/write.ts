@@ -34,6 +34,6 @@ export type responsePostData = {
   user: {
     userId: number;
     username: null | string;
-  },
+  };
   editable: boolean;
 };

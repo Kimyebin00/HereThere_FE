@@ -34,7 +34,8 @@ const Write = () => {
         resultItems[0].remove();
       }
     }
-  }
+  };
+  
   const mutation = useMutation({
     mutationFn: async (newPost: requestPostData) => {
       const res = await api.post("/api/v1/boards", newPost, {
