@@ -124,12 +124,32 @@ const Post = ({ params }: { params: { slug: number } }) => {
         console.log(postData.location?.longitude);
         console.log(postData.location?.latitude);
 
-        geocoder.coord2Address(longitude, latitude, function (result, status) {
-          if (status === window.kakao.maps.services.Status.OK) {
-            setLocationAddress(result[0].address.address_name);
-            // locationAddress = result[0].address.address_name;
+        geocoder.coord2Address(
+          longitude,
+          latitude,
+          function (
+            result: {
+              address: {
+                address_name: string;
+                region_1depth_name: string;
+                region_2depth_name: string;
+                region_3depth_name: string;
+              };
+              road_address?: {
+                address_name: string;
+                building_name: string;
+              };
+            }[],
+            status: kakao.maps.services.Status
+          ) {
+            if (status === window.kakao.maps.services.Status.OK) {
+              console.log(result);
+              console.log(typeof result);
+              setLocationAddress(result[0].address.address_name);
+              // locationAddress = result[0].address.address_name;
+            }
           }
-        });
+        );
       });
     };
 
