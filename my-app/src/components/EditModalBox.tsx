@@ -17,7 +17,7 @@ declare global {
   }
 }
 
-const EditModalBox = ({ postData, clickModal }): EditModalBoxProps => {
+const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | string>(
     postData.date,
   );
