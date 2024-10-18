@@ -213,13 +213,13 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
     const handleBroadcastMessage = (message: object[]) => {
       const updatedMessage = {
         ...message,
-        nickname: message.nickName, // nickName을 nickname으로 매핑
+        nickname: message?.nickName, // nickName을 nickname으로 매핑
       };
 
       setNewMessages(prevMessages => ({
         ...prevMessages,
-        [message.chatRoomId]: [
-          ...(prevMessages[message.chatRoomId] || []),
+        [message?.chatRoomId]: [
+          ...(prevMessages[message?.chatRoomId] || []),
           updatedMessage,
         ],
       }));
