@@ -140,7 +140,8 @@ const Post = ({ params }: { params: { slug: number } }) => {
                 building_name: string;
               };
             }[],
-            status: kakao.maps.services.Status,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            status: any,
           ) {
             if (status === window.kakao.maps.services.Status.OK) {
               console.log(result);
