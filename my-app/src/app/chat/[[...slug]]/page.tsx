@@ -28,6 +28,16 @@ interface ChatRoom {
   };
 }
 
+interface Message {
+  nickName: string;
+  content: string;
+  chatRoomId: number;
+}
+
+type MessagesByChatRoom = {
+  [key: number]: { nickname: string; content: string }[]; // 채팅방 ID에 따른 메시지 배열
+};
+
 // 사용자 정보를 가져오는 함수 (username 가져옴)
 const fetchUserInfo = async () => {
   const response = await axios.get("http://localhost:8000/api/v1/users", {
@@ -66,7 +76,7 @@ const sendMessage = async ({ chatRoomId, content }: sendChatProps) => {
   );
   return response.data;
 };
-
+v
 const leaveChatRoom = async (chatRoomId: number) => {
   const response = await axios.delete(
     `http://localhost:8000/api/v1/chatrooms/${chatRoomId}/leave`,
@@ -79,12 +89,8 @@ const leaveChatRoom = async (chatRoomId: number) => {
 
 const Chat = ({ params }: { params: { slug?: string[] } }) => {
   const [selectedChatRoom, setSelectedChatRoom] = useState<number | null>(null);
-  const [pastMessages, setPastMessages] = useState<{
-    [key: number]: { nickname: string; content: string }[];
-  }>({});
-  const [newMessages, setNewMessages] = useState<{
-    [key: number]: { nickname: string; message: string }[];
-  }>({});
+  const [pastMessages, setPastMessages] = useState<MessagesByChatRoom>({});
+  const [newMessages, setNewMessages] = useState<MessagesByChatRoom>({});
   const [newMessage, setNewMessage] = useState<string>("");
   const [currentUserNickname, setCurrentUserNickname] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -139,7 +145,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
     mutationFn: leaveChatRoom,
     onSuccess: () => {
       router.push("/chat"); // 채팅방을 나가면 기본 채팅 경로로 리다이렉트
-      queryClient.invalidateQueries({ queryKey: ["chatRooms"] });
+      queryClient.invalidateQueries(["chatRooms"]);
     },
   });
 
@@ -186,7 +192,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
 
   useEffect(() => {
     if (chatRoomDetailsData) {
-      setPastMessages(prev => ({
+      setPastMessages((prev:MessagesByChatRoom) => ({
         ...prev,
         [selectedChatRoom!]: chatRoomDetailsData.messages || [],
       }));
@@ -210,16 +216,16 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
       console.log("Disconnected from Socket.IO server");
     };
 
-    const handleBroadcastMessage = (message: object) => {
+    const handleBroadcastMessage = (message: Message) => {
       const updatedMessage = {
         ...message,
-        nickname: message?.nickName, // nickName을 nickname으로 매핑
+        nickname: message.nickName, // nickName을 nickname으로 매핑
       };
 
-      setNewMessages(prevMessages => ({
+      setNewMessages((prevMessages:MessagesByChatRoom) => ({
         ...prevMessages,
-        [message?.chatRoomId]: [
-          ...(prevMessages[message?.chatRoomId] || []),
+        [message.chatRoomId]: [
+          ...(prevMessages[message.chatRoomId] || []),
           updatedMessage,
         ],
       }));
