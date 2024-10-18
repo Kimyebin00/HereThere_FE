@@ -96,7 +96,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
     joinMutation.mutate(params.slug);
   };
 
-  const loadKakaoMap = (latitude, longitude) => {
+  const loadKakaoMap = (latitude: string, longitude: string) => {
     const kakaoMapScript = document.createElement("script");
     kakaoMapScript.async = false;
     kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=4b5f228cb3b8bf6903521cc0f6f67769&autoload=false&libraries=services`;
