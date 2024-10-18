@@ -76,7 +76,7 @@ const sendMessage = async ({ chatRoomId, content }: sendChatProps) => {
   );
   return response.data;
 };
-v
+
 const leaveChatRoom = async (chatRoomId: number) => {
   const response = await axios.delete(
     `http://localhost:8000/api/v1/chatrooms/${chatRoomId}/leave`,
@@ -192,7 +192,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
 
   useEffect(() => {
     if (chatRoomDetailsData) {
-      setPastMessages((prev:MessagesByChatRoom) => ({
+      setPastMessages((prev: MessagesByChatRoom) => ({
         ...prev,
         [selectedChatRoom!]: chatRoomDetailsData.messages || [],
       }));
@@ -222,7 +222,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
         nickname: message.nickName, // nickName을 nickname으로 매핑
       };
 
-      setNewMessages((prevMessages:MessagesByChatRoom) => ({
+      setNewMessages((prevMessages: MessagesByChatRoom) => ({
         ...prevMessages,
         [message.chatRoomId]: [
           ...(prevMessages[message.chatRoomId] || []),
