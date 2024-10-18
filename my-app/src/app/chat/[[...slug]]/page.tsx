@@ -254,7 +254,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
     }
   };
 
-  const handleKeyPress = e => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleSendMessage();
@@ -265,7 +265,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
   if (error) return <p>로그인 후 이용가능합니다.</p>;
 
   const selectedChatRoomTitle = data?.chatRooms?.find(
-    room => room.board.boardId === selectedChatRoom,
+    (room: ChatRoom) => room.board.boardId === selectedChatRoom,
   )?.board.title;
 
   return (
