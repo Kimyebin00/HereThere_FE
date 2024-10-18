@@ -210,7 +210,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
       console.log("Disconnected from Socket.IO server");
     };
 
-    const handleBroadcastMessage = (message: object[]) => {
+    const handleBroadcastMessage = (message: object) => {
       const updatedMessage = {
         ...message,
         nickname: message?.nickName, // nickName을 nickname으로 매핑
