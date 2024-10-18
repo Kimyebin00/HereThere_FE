@@ -140,7 +140,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
                 building_name: string;
               };
             }[],
-            status: kakao.maps.services.Status
+            status: kakao.maps.services.Status,
           ) {
             if (status === window.kakao.maps.services.Status.OK) {
               console.log(result);
@@ -148,7 +148,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
               setLocationAddress(result[0].address.address_name);
               // locationAddress = result[0].address.address_name;
             }
-          }
+          },
         );
       });
     };
