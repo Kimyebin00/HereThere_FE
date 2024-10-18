@@ -16,9 +16,9 @@ declare global {
   }
 }
 
-type ErrorType<T> = {
-  error: T | unknown;
-};
+// type ErrorType<T> = {
+//   error: T | unknown;
+// };
 
 const getPostData = async (id: number) => {
   const res = await api.get(`/api/v1/boards/${id}`, { withCredentials: true });
@@ -69,9 +69,9 @@ const Post = ({ params }: { params: { slug: number } }) => {
     onSuccess: () => {
       router.push(`/`);
     },
-    onError: (error: ErrorType<object>) => {
-      console.log(error.message);
-    },
+    // onError: (error: ErrorType<object>) => {
+    //   console.log(error.message);
+    // },
   });
 
   const joinMutation = useMutation({
@@ -79,9 +79,9 @@ const Post = ({ params }: { params: { slug: number } }) => {
     onSuccess: (data: { chatRoomId: number }) => {
       router.push(`/chat/${data.chatRoomId}`);
     },
-    onError: (error: ErrorType<object>) => {
-      console.log(error.message);
-    },
+    // onError: (error: ErrorType<object>) => {
+    //   console.log(error.message);
+    // },
   });
 
   const clickEditButton = () => {
