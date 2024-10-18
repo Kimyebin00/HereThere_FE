@@ -18,7 +18,7 @@ declare global {
 
 type ErrorType<T> = {
   error: T | unknown;
- };
+};
 
 const getPostData = async (id: number) => {
   const res = await api.get(`/api/v1/boards/${id}`, { withCredentials: true });
@@ -76,8 +76,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
 
   const joinMutation = useMutation({
     mutationFn: joinChatRoom,
-    onSuccess: (data: {chatRoomId: number}) => {
-      console.log(data)
+    onSuccess: (data: { chatRoomId: number }) => {
       router.push(`/chat/${data.chatRoomId}`);
     },
     onError: (error: ErrorType<object>) => {
