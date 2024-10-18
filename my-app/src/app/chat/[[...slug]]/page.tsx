@@ -296,7 +296,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
               >
                 <PostPreview
                   key={chatRoom.id}
-                  board_id={chatRoom.board.boardId}
+                  boardId={chatRoom.board.boardId}
                   title={chatRoom.board.title}
                   tag={[chatRoom.board.category]}
                   date={chatRoom.board.date}
