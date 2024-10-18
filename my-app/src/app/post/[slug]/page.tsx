@@ -15,6 +15,11 @@ declare global {
     kakao: any;
   }
 }
+
+type ErrorType<T> = {
+  error: T | unknown;
+ };
+
 const getPostData = async (id: number) => {
   const res = await api.get(`/api/v1/boards/${id}`, { withCredentials: true });
 
@@ -29,7 +34,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
   // let locationAddress = ""
   const router = useRouter();
 
-  const deletePostData = async id => {
+  const deletePostData = async (id: number) => {
     const res = await api.delete(`/api/v1/boards/${id}`, {
       withCredentials: true,
     });
@@ -37,7 +42,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
     return res.data;
   };
 
-  const joinChatRoom = async id => {
+  const joinChatRoom = async (id: number) => {
     const res = await api.post(
       `/api/v1/chatrooms/join/${id}`,
       {},
@@ -64,17 +69,18 @@ const Post = ({ params }: { params: { slug: number } }) => {
     onSuccess: () => {
       router.push(`/`);
     },
-    onError: error => {
+    onError: (error: ErrorType<object>) => {
       console.log(error.message);
     },
   });
 
   const joinMutation = useMutation({
     mutationFn: joinChatRoom,
-    onSuccess: data => {
+    onSuccess: (data: {chatRoomId: number}) => {
+      console.log(data)
       router.push(`/chat/${data.chatRoomId}`);
     },
-    onError: error => {
+    onError: (error: ErrorType<object>) => {
       console.log(error.message);
     },
   });
