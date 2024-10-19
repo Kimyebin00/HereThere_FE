@@ -67,7 +67,15 @@ const Write = () => {
     const locationName = document.getElementById("location");
     const startTime = document.getElementById("startTime");
 
-    if (title.value === "" || person === null || category === null || locationName.value === "" || selectedDate === null || startTime.value === "" || description.value === "") {
+    if (
+      title.value === "" ||
+      person === null ||
+      category === null ||
+      locationName.value === "" ||
+      selectedDate === null ||
+      startTime.value === "" ||
+      description.value === ""
+    ) {
       alert("모든 항목을 입력 또는 선택해주셔야 합니다!");
     } else {
       const request = {
