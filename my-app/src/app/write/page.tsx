@@ -63,10 +63,10 @@ const Write = () => {
   });
 
   const createPost = () => {
-    const title = document.getElementById("title");
-    const description = document.getElementById("description");
-    const locationName = document.getElementById("location");
-    const startTime = document.getElementById("startTime");
+    const title = document.getElementById("title") as HTMLInputElement | null;
+    const description = document.getElementById("description") as HTMLTextAreaElement | null;
+    const locationName = document.getElementById("location") as HTMLInputElement | null;
+    const startTime = document.getElementById("startTime") as HTMLInputElement | null;
 
     if (
       title ||
