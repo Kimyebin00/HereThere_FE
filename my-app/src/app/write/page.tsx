@@ -76,8 +76,8 @@ const Write = () => {
 
     if (
       !title?.value ||
-      person === null ||
-      category === null ||
+      !person ||
+      !category ||
       !locationName?.value ||
       !selectedDate ||
       !startTime?.value ||
