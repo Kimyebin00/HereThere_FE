@@ -63,7 +63,9 @@ const Boards = () => {
   };
 
   const handleStatusChange = (status: "OPEN" | "CLOSED") => {
-    setSelectedStatus((prevStatus: "OPEN" | "CLOSED" | "") => (prevStatus === status ? "" : status));
+    setSelectedStatus((prevStatus: "OPEN" | "CLOSED" | "") =>
+      prevStatus === status ? "" : status,
+    );
   };
 
   const filteredData = posts.filter((data: Board) => {
