@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { StaticImageData, Image } from "next/image";
+import Image from "next/image";
 import StudyInCafeImage from "@/assets/previewImages/StudyInCafe.png";
 import CoffeeChatImage from "@/assets/previewImages/CoffeeChat.png";
 import BoardgameImage from "@/assets/previewImages/BoardGame.png";
@@ -10,6 +10,7 @@ import NoImage from "@/assets/previewImages/NoImage.png";
 import LocationIcon from "@/assets/previewImages/LocationIcon.png";
 import TimeIcon from "@/assets/previewImages/TimeIcon.png";
 import PersonnelIcon from "@/assets/previewImages/PersonnelIcon.png";
+import StaticImageData from "next/image";
 
 interface PostPreviewProps {
   boardId: number;

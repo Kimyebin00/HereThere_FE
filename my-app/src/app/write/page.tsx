@@ -53,6 +53,11 @@ const Write = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: error => {
       console.log(error.message);
+
+      if (error.status === 401) {
+        alert("로그인한 회원만 참여 가능합니다.\n로그인 페이지로 이동합니다.");
+        router.push("/login");
+      }
     },
   });
 
@@ -62,41 +67,29 @@ const Write = () => {
     const locationName = document.getElementById("location");
     const startTime = document.getElementById("startTime");
 
-    const request = {
-      title: title.value,
-      category: category,
-      description: description.value,
-      location: {
-        latitude: lat,
-        longitude: lng,
-      },
-      locationName: locationName.value,
-      maxCapacity: person,
-      date: `${selectedDate.getFullYear()}-${
-        selectedDate.getMonth() + 1 < 10 ? "0" : ""
-      }${selectedDate.getMonth() + 1}-${
-        selectedDate.getDate() < 10 ? "0" : ""
-      }${selectedDate.getDate()}`,
-      startTime: startTime.value,
-    };
+    if (title.value === "" || person === null || category === null || locationName.value === "" || selectedDate === null || startTime.value === "" || description.value === "") {
+      alert("모든 항목을 입력 또는 선택해주셔야 합니다!");
+    } else {
+      const request = {
+        title: title.value,
+        category: category,
+        description: description.value,
+        location: {
+          latitude: lat,
+          longitude: lng,
+        },
+        locationName: locationName.value,
+        maxCapacity: person,
+        date: `${selectedDate?.getFullYear()}-${
+          selectedDate?.getMonth() + 1 < 10 ? "0" : ""
+        }${selectedDate?.getMonth() + 1}-${
+          selectedDate?.getDate() < 10 ? "0" : ""
+        }${selectedDate?.getDate()}`,
+        startTime: startTime.value,
+      };
 
-    if (person === null) {
-      alert("인원 수 선택은 필수입니다!");
+      mutation.mutate(request);
     }
-
-    if (category === "") {
-      alert("카테고리 선택은 필수입니다!");
-    }
-
-    if (locationName.value === "") {
-      alert("장소 선택은 필수입니다!");
-    }
-
-    if (selectedDate === null || startTime.value === "") {
-      alert("날짜 및 시간 선택은 필수입니다!");
-    }
-
-    mutation.mutate(request);
   };
 
   useEffect(() => {
@@ -222,7 +215,6 @@ const Write = () => {
           type="text"
           id="title"
           placeholder="제목을 입력해주세요."
-          required
           className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-11 w-full px-4 py-2.5 font-semibold text-sm"
         />
         <div className="flex md:flex-row flex-col justify-between w-full relative">
@@ -241,7 +233,6 @@ const Write = () => {
             <input
               type="time"
               id="startTime"
-              required
               className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-11 md:w-36 w-2/3 md:absolute right-[7rem] px-4 py-2.5 font-semibold text-sm text-zinc-500 cursor-pointer"
             />
             <div className="relative">
@@ -335,7 +326,6 @@ const Write = () => {
           id="description"
           placeholder="상세 내용을 입력해주세요."
           rows={12}
-          required
           className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-70 w-full px-4 py-2.5 font-semibold text-sm"
         ></textarea>
       </div>
