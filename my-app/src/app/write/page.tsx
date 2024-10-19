@@ -79,7 +79,7 @@ const Write = () => {
       person === null ||
       category === null ||
       !locationName?.value ||
-      selectedDate === null ||
+      !selectedDate ||
       !startTime?.value ||
       !description?.value
     ) {
@@ -95,11 +95,11 @@ const Write = () => {
         },
         locationName: locationName.value,
         maxCapacity: person,
-        date: `${selectedDate?.getFullYear()}-${
-          selectedDate?.getMonth() + 1 < 10 ? "0" : ""
-        }${selectedDate?.getMonth() + 1}-${
-          selectedDate?.getDate() < 10 ? "0" : ""
-        }${selectedDate?.getDate()}`,
+        date: `${selectedDate.getFullYear()}-${
+          selectedDate.getMonth() + 1 < 10 ? "0" : ""
+        }${selectedDate.getMonth() + 1}-${
+          selectedDate.getDate() < 10 ? "0" : ""
+        }${selectedDate.getDate()}`,
         startTime: startTime.value,
       };
 
