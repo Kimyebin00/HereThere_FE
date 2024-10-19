@@ -16,7 +16,7 @@ declare global {
 }
 
 const Write = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>();
+  const [selectedDate, setSelectedDate] = useState<Date>();
   const [view, setView] = useState(false);
   const [person, setPerson] = useState<number>();
   const [category, setCategory] = useState<string>();
@@ -80,7 +80,22 @@ const Write = () => {
       startTime: startTime.value,
     };
 
-    console.log(request);
+    if (person === null) {
+      alert("인원 수 선택은 필수입니다!");
+    }
+
+    if (category === "") {
+      alert("카테고리 선택은 필수입니다!");
+    }
+
+    if (locationName.value === "") {
+      alert("장소 선택은 필수입니다!");
+    }
+
+    if (selectedDate === null || startTime.value === "") {
+      alert("날짜 및 시간 선택은 필수입니다!");
+    }
+
     mutation.mutate(request);
   };
 
@@ -207,6 +222,7 @@ const Write = () => {
           type="text"
           id="title"
           placeholder="제목을 입력해주세요."
+          required
           className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-11 w-full px-4 py-2.5 font-semibold text-sm"
         />
         <div className="flex md:flex-row flex-col justify-between w-full relative">
@@ -225,6 +241,7 @@ const Write = () => {
             <input
               type="time"
               id="startTime"
+              required
               className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-11 md:w-36 w-2/3 md:absolute right-[7rem] px-4 py-2.5 font-semibold text-sm text-zinc-500 cursor-pointer"
             />
             <div className="relative">
@@ -318,6 +335,7 @@ const Write = () => {
           id="description"
           placeholder="상세 내용을 입력해주세요."
           rows={12}
+          required
           className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-70 w-full px-4 py-2.5 font-semibold text-sm"
         ></textarea>
       </div>
