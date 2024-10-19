@@ -28,7 +28,9 @@ interface Place {
 }
 
 const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(postData.date));
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    new Date(postData.date),
+  );
   const [view, setView] = useState(false);
   const [person, setPerson] = useState<number>(postData.maxCapacity);
   const [category, setCategory] = useState<string>(postData.category);
