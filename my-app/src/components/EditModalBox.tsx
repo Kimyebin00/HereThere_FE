@@ -18,6 +18,14 @@ declare global {
   }
 }
 
+interface Place {
+  place_name: string;
+  address_name: string;
+  x: number; // 경도
+  y: number; // 위도
+  [key: string]: any; // 추가 속성 허용
+}
+
 const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | string>(
     postData.date,
@@ -52,34 +60,48 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
   });
 
   const editPost = () => {
-    const title = document.getElementById("title");
-    const description = document.getElementById("description");
-    const locationName = document.getElementById("location");
-    const startTime = document.getElementById("startTime");
+    const title = document.getElementById("title") as HTMLInputElement | null;
+    const description = document.getElementById(
+      "description",
+    ) as HTMLTextAreaElement | null;
+    const locationName = document.getElementById(
+      "location",
+    ) as HTMLInputElement | null;
+    const startTime = document.getElementById(
+      "startTime",
+    ) as HTMLInputElement | null;
 
-    const request = {
-      title: title.value,
-      category: category,
-      description: description.value,
-      location: {
-        latitude: lat,
-        longitude: lng,
-      },
-      locationName: locationName.value,
-      maxCapacity: person,
-      date:
-        typeof selectedDate === "string"
-          ? selectedDate
-          : `${selectedDate.getFullYear()}-${
-              selectedDate.getMonth() + 1 < 10 ? "0" : ""
-            }${selectedDate.getMonth() + 1}-${
-              selectedDate.getDate() < 10 ? "0" : ""
-            }${selectedDate.getDate()}`,
-      startTime: startTime.value,
-    };
+    if (
+      !title?.value ||
+      !person ||
+      !category ||
+      !locationName?.value ||
+      !selectedDate ||
+      !startTime?.value ||
+      !description?.value
+    ) {
+      alert("모든 항목을 입력 또는 선택해주셔야 합니다!");
+    } else {
+      const request = {
+        title: title.value,
+        category: category,
+        description: description.value,
+        location: {
+          latitude: lat,
+          longitude: lng,
+        },
+        locationName: locationName.value,
+        maxCapacity: person,
+        date: `${selectedDate.getFullYear()}-${
+          selectedDate.getMonth() + 1 < 10 ? "0" : ""
+        }${selectedDate.getMonth() + 1}-${
+          selectedDate.getDate() < 10 ? "0" : ""
+        }${selectedDate.getDate()}`,
+        startTime: startTime.value,
+      };
 
-    console.log(request);
-    mutation.mutate(request);
+      mutation.mutate(request);
+    }
   };
 
   function removeAllResultItems(parent: HTMLElement, child: string) {
@@ -171,11 +193,11 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
         });
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        function displayPlaces(places: object[]) {
+        function displayPlaces(places: Place[]) {
           resultList.innerHTML = "";
 
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          places.forEach(function (place) {
+          places.forEach(function (place: Place) {
             const listItem = document.createElement("div");
             listItem.className =
               "result-item h-16 bg-white flex flex-col justify-center";

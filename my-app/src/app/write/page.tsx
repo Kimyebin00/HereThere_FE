@@ -15,6 +15,14 @@ declare global {
   }
 }
 
+interface Place {
+  place_name: string;
+  address_name: string;
+  x: number; // 경도
+  y: number; // 위도
+  [key: string]: any; // 추가 속성 허용
+}
+
 const Write = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [view, setView] = useState(false);
@@ -180,11 +188,11 @@ const Write = () => {
         });
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        function displayPlaces(places: object[]) {
+        function displayPlaces(places: Place[]) {
           resultList.innerHTML = "";
 
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          places.forEach((place: object) => {
+          places.forEach((place: Place) => {
             const listItem = document.createElement("div");
             listItem.className =
               "result-item h-16 flex flex-col justify-center";
