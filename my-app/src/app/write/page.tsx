@@ -54,6 +54,7 @@ const Write = () => {
     onError: error => {
       console.log(error.message);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if ((error as any).status === 401) {
         alert("로그인한 회원만 참여 가능합니다.\n로그인 페이지로 이동합니다.");
         router.push("/login");
