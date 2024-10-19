@@ -25,7 +25,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     >
       <div
         className="flex flex-col relative md:w-[28rem] w-[22rem] h-[16rem] items-center justify-center bg-white rounded-[10px] px-8 py-6"
-        onClick={e => e.stopPropagation()}
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
         <div
           className="flex absolute top-3 right-4 cursor-pointer"

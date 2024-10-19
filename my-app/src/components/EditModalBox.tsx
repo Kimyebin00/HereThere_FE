@@ -9,6 +9,7 @@ import CloseOnIcon from "@/assets/post/closeOn.svg";
 import CloseOffIcon from "@/assets/post/closeOff.svg";
 import Image from "next/image";
 import EditModalBoxProps from "@/types/EditModalBoxProps";
+import { requestPostData } from "@/types/write";
 
 declare global {
   interface Window {
@@ -30,7 +31,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: async editedPost => {
+    mutationFn: async (editedPost: requestPostData) => {
       const res = await api.patch(`/api/v1/boards/${postData.id}`, editedPost, {
         withCredentials: true,
         headers: {
@@ -44,6 +45,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
       clickModal();
       location.reload();
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: error => {
       console.log(error.message);
     },
@@ -80,7 +82,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
     mutation.mutate(request);
   };
 
-  function removeAllResultItems(parent, child) {
+  function removeAllResultItems(parent: HTMLElement, child: string) {
     if (parent) {
       const resultItems = parent.getElementsByClassName(child);
       while (resultItems.length > 0) {
@@ -96,13 +98,13 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
 
     if (view) {
       personList?.classList.remove("hidden");
-      Array.from(personListItems).forEach(item => {
+      Array.from(personListItems).forEach((item: Element) => {
         item.classList.remove("hidden");
       });
     }
     if (!view) {
       personList?.classList.add("hidden");
-      Array.from(personListItems).forEach(item => {
+      Array.from(personListItems).forEach((item: Element) => {
         item.classList.add("hidden");
       });
     }
@@ -148,6 +150,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
             return;
           }
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ps.keywordSearch(keyword, function (data: object[], status: string) {
             resultList.classList.add(
               "h-[18rem]",
@@ -167,9 +170,11 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
           });
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         function displayPlaces(places: object[]) {
           resultList.innerHTML = "";
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           places.forEach(function (place) {
             const listItem = document.createElement("div");
             listItem.className =
@@ -215,7 +220,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
     >
       <div
         className="flex flex-col relative md:w-[33rem] w-[23rem] h-[40rem] items-center justify-center bg-white rounded-[10px] px-8 py-6"
-        onClick={e => e.stopPropagation()}
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
         <div
           className="flex absolute top-3 right-4 cursor-pointer"
@@ -246,7 +251,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
               shouldCloseOnSelect
               minDate={new Date()}
               selected={selectedDate}
-              onChange={date => setSelectedDate(date)}
+              onChange={(date: Date) => setSelectedDate(date)}
               placeholderText="날짜를 선택해주세요."
               className="placeholder:text-zinc-500 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] z-30 h-11 w-full px-4 py-2.5 font-semibold text-sm"
               calendarClassName="bg-pink"
@@ -268,7 +273,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
                       : "border-pink border-[1.5px]"
                   }`}
                   onClick={() => {
-                    setView(prev => !prev);
+                    setView((prev: boolean) => !prev);
                   }}
                 >
                   {person === undefined ? "인원 선택" : `${person}명`}
@@ -278,11 +283,11 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
                   className="hidden absolute top-full z-20 overflow-auto h-56 bg-white border border-[1.5px] border-pink border-solid rounded-[3px] right-0 max-w-[10rem] w-24"
                 >
                   <>
-                    {personItems.map((item, index) => (
+                    {personItems.map((item: string, index: string) => (
                       <div
                         key={index}
                         onClick={() => {
-                          setView(prev => !prev);
+                          setView((prev: boolean) => !prev);
                           setPerson(item);
                         }}
                         className="person-item hidden hover:text-darkpink cursor-pointer w-full flex bg-white h-9 items-center justify-center py-2.5 font-semibold text-sm text-zinc-500"

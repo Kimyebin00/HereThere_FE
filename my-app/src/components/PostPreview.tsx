@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { StaticImageData, Image } from "next/image";
 import StudyInCafeImage from "@/assets/previewImages/StudyInCafe.png";
 import CoffeeChatImage from "@/assets/previewImages/CoffeeChat.png";
 import BoardgameImage from "@/assets/previewImages/BoardGame.png";
@@ -58,12 +58,12 @@ const PostPreview: React.FC<PostPreviewProps> = ({
         `http://localhost:8000/sse/board/${boardId}`,
       );
 
-      eventSource.onmessage = event => {
+      eventSource.onmessage = (event: MessageEvent) => {
         const data = JSON.parse(event.data);
         setCurrentPerson(data.currentPerson);
       };
 
-      eventSource.onerror = error => {
+      eventSource.onerror = (error: Event) => {
         console.error("EventSource failed:", error);
         eventSource.close();
       };

@@ -81,7 +81,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
     },
     onError: () => {
       alert("로그인한 회원만 참여 가능합니다.\n로그인 페이지로 이동합니다.");
-      router.push('/login');
+      router.push("/login");
     },
   });
 
@@ -194,12 +194,12 @@ const Post = ({ params }: { params: { slug: number } }) => {
       `http://localhost:8000/sse/board/${params.slug}`,
     );
 
-    eventSource.onmessage = event => {
+    eventSource.onmessage = (event: MessageEvent) => {
       const data = JSON.parse(event.data);
       setCurrentPerson(data.currentPerson);
     };
 
-    eventSource.onerror = error => {
+    eventSource.onerror = (error: Event) => {
       console.error("EventSource failed:", error);
       eventSource.close();
     };
