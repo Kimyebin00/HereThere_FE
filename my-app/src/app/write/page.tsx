@@ -20,6 +20,7 @@ interface Place {
   address_name: string;
   x: number; // 경도
   y: number; // 위도
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; // 추가 속성 허용
 }
 
