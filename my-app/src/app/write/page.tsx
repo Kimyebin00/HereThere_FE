@@ -80,21 +80,21 @@ const Write = () => {
       alert("모든 항목을 입력 또는 선택해주셔야 합니다!");
     } else {
       const request = {
-        title: title.value,
+        title: title?.value,
         category: category,
-        description: description.value,
+        description: description?.value,
         location: {
           latitude: lat,
           longitude: lng,
         },
-        locationName: locationName.value,
+        locationName: locationName?.value,
         maxCapacity: person,
         date: `${selectedDate?.getFullYear()}-${
           selectedDate?.getMonth() + 1 < 10 ? "0" : ""
         }${selectedDate?.getMonth() + 1}-${
           selectedDate?.getDate() < 10 ? "0" : ""
         }${selectedDate?.getDate()}`,
-        startTime: startTime.value,
+        startTime: startTime?.value,
       };
 
       mutation.mutate(request);
