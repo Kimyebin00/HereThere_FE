@@ -69,13 +69,13 @@ const Write = () => {
     const startTime = document.getElementById("startTime");
 
     if (
-      title.value === "" ||
+      title ||
       person === null ||
       category === null ||
-      locationName.value === "" ||
+      locationName ||
       selectedDate === null ||
-      startTime.value === "" ||
-      description.value === ""
+      startTime ||
+      description
     ) {
       alert("모든 항목을 입력 또는 선택해주셔야 합니다!");
     } else {
