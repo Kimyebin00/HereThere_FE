@@ -168,8 +168,7 @@ const Write = () => {
             return;
           }
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ps.keywordSearch(keyword, function (data: object[], status: string) {
+          ps.keywordSearch(keyword, function (data: Place[], status: string) {
             resultList.classList.add(
               "h-[18rem]",
               "bg-white",
