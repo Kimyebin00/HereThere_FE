@@ -51,7 +51,8 @@ const PostPreview: React.FC<PostPreviewProps> = ({
   link,
   onClick,
 }) => {
-  const [currentPerson, setCurrentPerson] = useState<number>(initialCurrentPerson); // 초기 참여 인원 값 설정
+  const [currentPerson, setCurrentPerson] = 
+    useState<number>(initialCurrentPerson); // 초기 참여 인원 값 설정
 
   useEffect(() => {
     if (boardId) {
