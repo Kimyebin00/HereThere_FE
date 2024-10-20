@@ -283,7 +283,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
               <input
                 type="time"
                 id="startTime"
-                defaultValue={postData.startTime}
+                defaultValue={postData.startTime ?? ""}
                 className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-11 md:w-36 w-2/3 md:absolute right-[7rem] px-4 py-2.5 font-semibold text-sm text-zinc-500 cursor-pointer"
               />
               <div className="relative">
