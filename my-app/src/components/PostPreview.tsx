@@ -32,7 +32,7 @@ const tagColors: { [key: string]: string } = {
   보드게임: "bg-yellow-100",
 };
 
-const categoryImages: { [key: string]: StaticImageData } = {
+const categoryImages: { [key: string]: typeof StaticImageData } = {
   커피챗: CoffeeChatImage,
   카공: StudyInCafeImage,
   보드게임: BoardgameImage,
@@ -51,7 +51,7 @@ const PostPreview: React.FC<PostPreviewProps> = ({
   link,
   onClick,
 }) => {
-  const [currentPerson, setCurrentPerson] = useState(initialCurrentPerson); // 초기 참여 인원 값 설정
+  const [currentPerson, setCurrentPerson] = useState<number>(initialCurrentPerson); // 초기 참여 인원 값 설정
 
   useEffect(() => {
     if (boardId) {
