@@ -25,14 +25,14 @@ interface PostPreviewProps {
   onClick?: () => void; // 추가된 부분
 }
 
-const tagColors: { [key: string]: typeof CoffeeChatImage } = {
+const tagColors: { [key: string]: string } = {
   커피챗: "bg-rose-100",
   카공: "bg-blue-100",
   기타: "bg-green-100",
   보드게임: "bg-yellow-100",
 };
 
-const categoryImages: { [key: string]: StaticImageData } = {
+const categoryImages: { [key: string]: typeof CoffeeChatImage } = {
   커피챗: CoffeeChatImage,
   카공: StudyInCafeImage,
   보드게임: BoardgameImage,
