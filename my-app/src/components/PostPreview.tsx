@@ -25,14 +25,14 @@ interface PostPreviewProps {
   onClick?: () => void; // 추가된 부분
 }
 
-const tagColors: { [key: string]: string } = {
+const tagColors: { [key: string]: typeof CoffeeChatImage } = {
   커피챗: "bg-rose-100",
   카공: "bg-blue-100",
   기타: "bg-green-100",
   보드게임: "bg-yellow-100",
 };
 
-const categoryImages: { [key: string]: typeof StaticImageData } = {
+const categoryImages: { [key: string]: StaticImageData } = {
   커피챗: CoffeeChatImage,
   카공: StudyInCafeImage,
   보드게임: BoardgameImage,
@@ -82,9 +82,7 @@ const PostPreview: React.FC<PostPreviewProps> = ({
       : "bg-lightgray";
 
   const imageSrc =
-    tag && tag.length > 0
-      ? categoryImages[tag[0]].src || NoImage.src
-      : NoImage.src;
+    tag && tag.length > 0 ? categoryImages[tag[0]] || NoImage : NoImage;
 
   const content = (
     <div className="flex flex-row w-[30rem] xl:w-[32rem] h-32 bg-white rounded-3xl p-3 border border-1 border-lightgray cursor-pointer transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-lightgray hover:border-darkpink ">
