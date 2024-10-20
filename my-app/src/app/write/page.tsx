@@ -277,7 +277,7 @@ const Write = () => {
                 className="hidden absolute top-full z-[1000] overflow-auto h-56 bg-white border border-[1.5px] border-pink border-solid rounded-[3px] right-0 max-w-[10rem] w-24"
               >
                 <>
-                  {personItems.map((item, index) => (
+                  {personItems.map((item: number, index: number) => (
                     <div
                       key={index}
                       onClick={() => {

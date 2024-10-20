@@ -305,7 +305,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
                   className="hidden absolute top-full z-20 overflow-auto h-56 bg-white border border-[1.5px] border-pink border-solid rounded-[3px] right-0 max-w-[10rem] w-24"
                 >
                   <>
-                    {personItems.map((item: string, index: string) => (
+                    {personItems.map((item: number, index: number) => (
                       <div
                         key={index}
                         onClick={() => {
@@ -366,7 +366,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
               name="location"
               id="location"
               placeholder="만날 장소를 입력해주세요."
-              defaultValue={postData.location.locationName}
+              defaultValue={postData.location.locationName ?? ""}
               className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] z-10 h-11 w-full px-4 py-2.5 font-semibold text-sm"
             />
             <div
@@ -377,7 +377,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
           <textarea
             id="description"
             placeholder="상세 내용을 입력해주세요."
-            defaultValue={postData.description}
+            defaultValue={postData.description ?? ""}
             rows={12}
             className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-70 w-full px-4 py-2.5 font-semibold text-sm"
           ></textarea>
