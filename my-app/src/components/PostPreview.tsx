@@ -82,7 +82,9 @@ const PostPreview: React.FC<PostPreviewProps> = ({
       : "bg-lightgray";
 
   const imageSrc =
-    tag && tag.length > 0 ? categoryImages[tag[0]].src || NoImage.src : NoImage.src;
+    tag && tag.length > 0 ?
+      categoryImages[tag[0]].src || NoImage.src :
+      NoImage.src;
 
   const content = (
     <div className="flex flex-row w-[30rem] xl:w-[32rem] h-32 bg-white rounded-3xl p-3 border border-1 border-lightgray cursor-pointer transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-lightgray hover:border-darkpink ">
