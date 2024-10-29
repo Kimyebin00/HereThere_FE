@@ -177,7 +177,6 @@ const Post = ({ params }: { params: { slug: number } }) => {
   useEffect(() => {
     if (isSuccess && postData) {
       setCurrentPerson(postData.currentPerson);
-      console.log(postData)
       loadKakaoMap(postData.location.latitude, postData.location.longitude);
     }
   }, [isSuccess, postData]);

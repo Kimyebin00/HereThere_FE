@@ -10,7 +10,6 @@ import NoImage from "@/assets/previewImages/NoImage.png";
 import LocationIcon from "@/assets/previewImages/LocationIcon.png";
 import TimeIcon from "@/assets/previewImages/TimeIcon.png";
 import PersonnelIcon from "@/assets/previewImages/PersonnelIcon.png";
-import StaticImageData from "next/image";
 
 interface PostPreviewProps {
   boardId: number;

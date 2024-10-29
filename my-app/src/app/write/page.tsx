@@ -34,7 +34,8 @@ const Write = () => {
   const [lat, setLat] = useState<number>(0);
   const [lng, setLng] = useState<number>(0);
   const [keyword, setKeyword] = useState<string>("");
-  const [selectedFromDropdown, setSelectedFromDropdown] = useState<boolean>(false);
+  const [selectedFromDropdown, setSelectedFromDropdown] =
+    useState<boolean>(false);
   const debouncedKeyword = useDebounce(keyword, 300);
 
   const router = useRouter();
@@ -153,25 +154,34 @@ const Write = () => {
         ) as HTMLElement;
 
         if (debouncedKeyword.trim() && !selectedFromDropdown) {
-          ps.keywordSearch(debouncedKeyword, function (data: Place[], status: string) {
-            resultList.classList.add(
-              "h-[18rem]",
-              "bg-white",
-              "border",
-              "border-[1px]",
-              "rounded-[3px]",
-              "border-zinc-300",
-            );
+          ps.keywordSearch(debouncedKeyword,
+            function (data: Place[], status: string) {
+              resultList.classList.add(
+                "h-[18rem]",
+                "bg-white",
+                "border",
+                "border-[1px]",
+                "rounded-[3px]",
+                "border-zinc-300",
+              );
 
-            if (status === window.kakao.maps.services.Status.OK) {
-              displayPlaces(data);
-            } else {
-              resultList.innerHTML = '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
-            }
-          });
+              if (status === window.kakao.maps.services.Status.OK) {
+                displayPlaces(data);
+              } else {
+                resultList.innerHTML =
+                  '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
+              }
+            });
         } else {
           resultList.innerHTML = "";
-          resultList.classList.remove("h-[18rem]", "bg-white", "border", "border-[1px]", "rounded-[3px]", "border-zinc-300");
+          resultList.classList.remove(
+            "h-[18rem]",
+            "bg-white",
+            "border",
+            "border-[1px]",
+            "rounded-[3px]",
+            "border-zinc-300"
+          );
         }
       });
     };

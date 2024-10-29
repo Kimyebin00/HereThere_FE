@@ -39,7 +39,9 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
   const [lat, setLat] = useState<number>(postData.location?.latitude);
   const [lng, setLng] = useState<number>(postData.location?.longitude);
   const [isHovered, setIsHovered] = useState(false);
-  const [keyword, setKeyword] = useState<string>(postData.location?.locationName);
+  const [keyword, setKeyword] = useState<string>(
+    postData.location?.locationName,
+  );
   const [selectedFromDropdown, setSelectedFromDropdown] = useState<boolean>(true);
   const debouncedKeyword = useDebounce(keyword, 300);
 
@@ -151,25 +153,34 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
         ) as HTMLElement;
 
         if (debouncedKeyword.trim() && !selectedFromDropdown) {
-          ps.keywordSearch(debouncedKeyword, function (data: Place[], status: string) {
-            resultList.classList.add(
-              "h-[18rem]",
-              "bg-white",
-              "border",
-              "border-[1px]",
-              "rounded-[3px]",
-              "border-zinc-300",
-            );
+          ps.keywordSearch(debouncedKeyword,
+            function (data: Place[], status: string) {
+              resultList.classList.add(
+                "h-[18rem]",
+                "bg-white",
+                "border",
+                "border-[1px]",
+                "rounded-[3px]",
+                "border-zinc-300",
+              );
 
-            if (status === window.kakao.maps.services.Status.OK) {
-              displayPlaces(data);
-            } else {
-              resultList.innerHTML = '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
-            }
-          });
+              if (status === window.kakao.maps.services.Status.OK) {
+                displayPlaces(data);
+              } else {
+                resultList.innerHTML =
+                  '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
+              }
+            });
         } else {
           resultList.innerHTML = "";
-          resultList.classList.remove("h-[18rem]", "bg-white", "border", "border-[1px]", "rounded-[3px]", "border-zinc-300");
+          resultList.classList.remove(
+            "h-[18rem]",
+            "bg-white",
+            "border",
+            "border-[1px]",
+            "rounded-[3px]",
+            "border-zinc-300"
+          );
         }
       });
     };
