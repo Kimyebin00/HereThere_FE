@@ -32,7 +32,7 @@ const tagColors: { [key: string]: string } = {
   보드게임: "bg-yellow-100",
 };
 
-const categoryImages: { [key: string]: typeof CoffeeChatImage } = {
+const categoryImages: { [key: string]: string } = {
   커피챗: CoffeeChatImage,
   카공: StudyInCafeImage,
   보드게임: BoardgameImage,
