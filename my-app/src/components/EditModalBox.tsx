@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
+import useDebounce from "@/hooks/useDebounce";
 import api from "@/utils/api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -38,6 +39,9 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
   const [lat, setLat] = useState<number>(postData.location?.latitude);
   const [lng, setLng] = useState<number>(postData.location?.longitude);
   const [isHovered, setIsHovered] = useState(false);
+  const [keyword, setKeyword] = useState<string>(postData.location?.locationName);
+  const [selectedFromDropdown, setSelectedFromDropdown] = useState<boolean>(true);
+  const debouncedKeyword = useDebounce(keyword, 300);
 
   const mutation = useMutation({
     mutationFn: async (editedPost: requestPostData) => {
@@ -115,7 +119,6 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
   }
 
   useEffect(() => {
-    console.log(view);
     const personList = document.getElementById("personList");
     const personListItems = document.getElementsByClassName("person-item");
 
@@ -134,13 +137,6 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
   }, [view]);
 
   useEffect(() => {
-    const calendarHeader = document.getElementsByClassName(
-      "react-datepicker__header ",
-    );
-
-    console.log(calendarHeader);
-    // calendarHeader[0].classList.add("bg-pink");
-
     const kakaoMapScript = document.createElement("script");
     kakaoMapScript.async = false;
     kakaoMapScript.type = "text/javascript";
@@ -150,30 +146,12 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
     const onLoadKakaoAPI = () => {
       window.kakao.maps.load(() => {
         const ps = new window.kakao.maps.services.Places();
-        const keywordInput = document.getElementById(
-          "location",
-        ) as HTMLInputElement;
         const resultList = document.getElementById(
           "result-list",
         ) as HTMLElement;
 
-        keywordInput.addEventListener("keyup", function () {
-          const keyword = keywordInput.value;
-
-          if (!keyword.trim()) {
-            resultList.innerHTML = "";
-            resultList.classList.remove(
-              "h-[18rem]",
-              "bg-white",
-              "border",
-              "border-[1px]",
-              "rounded-[3px]",
-              "border-zinc-300",
-            );
-            return;
-          }
-
-          ps.keywordSearch(keyword, function (data: Place[], status: string) {
+        if (debouncedKeyword.trim() && !selectedFromDropdown) {
+          ps.keywordSearch(debouncedKeyword, function (data: Place[], status: string) {
             resultList.classList.add(
               "h-[18rem]",
               "bg-white",
@@ -186,54 +164,59 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
             if (status === window.kakao.maps.services.Status.OK) {
               displayPlaces(data);
             } else {
-              resultList.innerHTML =
-                '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
+              resultList.innerHTML = '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
             }
           });
-        });
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        function displayPlaces(places: Place[]) {
+        } else {
           resultList.innerHTML = "";
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          places.forEach(function (place: Place) {
-            const listItem = document.createElement("div");
-            listItem.className =
-              "result-item h-16 bg-white flex flex-col justify-center";
-
-            const placeName = document.createElement("p");
-            placeName.innerText = place.place_name;
-            placeName.className = "font-semibold";
-
-            const placeAddress = document.createElement("p");
-            placeAddress.innerText = place.address_name;
-            placeAddress.className = "text-zinc-500 text-sm";
-
-            listItem.appendChild(placeName);
-            listItem.appendChild(placeAddress);
-
-            listItem.onclick = function () {
-              resultList.classList.add("hidden");
-
-              keywordInput.value = place.place_name;
-
-              setLng(place.x);
-              setLat(place.y);
-
-              removeAllResultItems(resultList, "result-item");
-            };
-
-            resultList.appendChild(listItem);
-          });
-
-          resultList.classList.remove("hidden");
+          resultList.classList.remove("h-[18rem]", "bg-white", "border", "border-[1px]", "rounded-[3px]", "border-zinc-300");
         }
       });
     };
 
     kakaoMapScript.addEventListener("load", onLoadKakaoAPI);
-  }, []);
+
+    function displayPlaces(places: Place[]) {
+      const resultList = document.getElementById(
+        "result-list",
+      ) as HTMLElement;
+
+      resultList.innerHTML = "";
+
+      places.forEach(function (place: Place) {
+        const listItem = document.createElement("div");
+        listItem.className =
+          "result-item h-16 bg-white flex flex-col justify-center";
+
+        const placeName = document.createElement("p");
+        placeName.innerText = place.place_name;
+        placeName.className = "font-semibold";
+
+        const placeAddress = document.createElement("p");
+        placeAddress.innerText = place.address_name;
+        placeAddress.className = "text-zinc-500 text-sm";
+
+        listItem.appendChild(placeName);
+        listItem.appendChild(placeAddress);
+
+        listItem.onclick = function () {
+          resultList.classList.add("hidden");
+          setSelectedFromDropdown(true);
+          setKeyword(place.place_name);
+          setLng(place.x);
+          setLat(place.y);
+
+          removeAllResultItems(resultList, "result-item");
+        };
+
+        resultList.appendChild(listItem);
+      });
+
+      resultList.classList.remove("hidden");
+    }
+
+    return () => kakaoMapScript.removeEventListener("load", onLoadKakaoAPI);
+  }, [debouncedKeyword]);
 
   return (
     <div
@@ -365,6 +348,11 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
               type="text"
               name="location"
               id="location"
+              value={keyword}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setKeyword(e.target.value);
+                setSelectedFromDropdown(false);
+              }}
               placeholder="만날 장소를 입력해주세요."
               defaultValue={postData.location.locationName ?? ""}
               className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] z-10 h-11 w-full px-4 py-2.5 font-semibold text-sm"

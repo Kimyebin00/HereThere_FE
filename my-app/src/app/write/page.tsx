@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import useDebounce from "@/hooks/useDebounce";
 import api from "@/utils/api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -21,17 +22,20 @@ interface Place {
   x: number; // 경도
   y: number; // 위도
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any; // 추가 속성 허용
+  [key: string]: any;
 }
 
 const Write = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
-  const [view, setView] = useState(false);
+  const [view, setView] = useState<boolean>(false);
   const [person, setPerson] = useState<number>();
   const [category, setCategory] = useState<string>();
   const personItems = Array.from({ length: 14 }, (_, index) => index + 2);
   const [lat, setLat] = useState<number>(0);
   const [lng, setLng] = useState<number>(0);
+  const [keyword, setKeyword] = useState<string>("");
+  const [selectedFromDropdown, setSelectedFromDropdown] = useState<boolean>(false);
+  const debouncedKeyword = useDebounce(keyword, 300);
 
   const router = useRouter();
 
@@ -117,7 +121,6 @@ const Write = () => {
   };
 
   useEffect(() => {
-    console.log(view);
     const personList = document.getElementById("personList");
     const personListItems = document.getElementsByClassName("person-item");
 
@@ -145,30 +148,12 @@ const Write = () => {
     const onLoadKakaoAPI = () => {
       window.kakao.maps.load(() => {
         const ps = new window.kakao.maps.services.Places();
-        const keywordInput = document.getElementById(
-          "location",
-        ) as HTMLInputElement;
         const resultList = document.getElementById(
           "result-list",
         ) as HTMLElement;
 
-        keywordInput.addEventListener("keyup", function () {
-          const keyword = keywordInput.value;
-
-          if (!keyword.trim()) {
-            resultList.innerHTML = "";
-            resultList.classList.remove(
-              "h-18rem]",
-              "bg-white",
-              "border",
-              "border-[1px]",
-              "rounded-[3px]",
-              "border-zinc-300",
-            );
-            return;
-          }
-
-          ps.keywordSearch(keyword, function (data: Place[], status: string) {
+        if (debouncedKeyword.trim() && !selectedFromDropdown) {
+          ps.keywordSearch(debouncedKeyword, function (data: Place[], status: string) {
             resultList.classList.add(
               "h-[18rem]",
               "bg-white",
@@ -181,54 +166,59 @@ const Write = () => {
             if (status === window.kakao.maps.services.Status.OK) {
               displayPlaces(data);
             } else {
-              resultList.innerHTML =
-                '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
+              resultList.innerHTML = '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
             }
           });
-        });
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        function displayPlaces(places: Place[]) {
+        } else {
           resultList.innerHTML = "";
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          places.forEach((place: Place) => {
-            const listItem = document.createElement("div");
-            listItem.className =
-              "result-item h-16 flex flex-col justify-center";
-
-            const placeName = document.createElement("p");
-            placeName.innerText = place.place_name;
-            placeName.className = "font-semibold";
-
-            const placeAddress = document.createElement("p");
-            placeAddress.innerText = place.address_name;
-            placeAddress.className = "text-zinc-500 text-sm";
-
-            listItem.appendChild(placeName);
-            listItem.appendChild(placeAddress);
-
-            listItem.onclick = function () {
-              resultList.classList.add("hidden");
-
-              keywordInput.value = place.place_name;
-
-              setLng(place.x);
-              setLat(place.y);
-
-              removeAllResultItems(resultList, "result-item");
-            };
-
-            resultList.appendChild(listItem);
-          });
-
-          resultList.classList.remove("hidden");
+          resultList.classList.remove("h-[18rem]", "bg-white", "border", "border-[1px]", "rounded-[3px]", "border-zinc-300");
         }
       });
     };
 
     kakaoMapScript.addEventListener("load", onLoadKakaoAPI);
-  }, []);
+
+    function displayPlaces(places: Place[]) {
+      const resultList = document.getElementById(
+        "result-list",
+      ) as HTMLElement;
+
+      resultList.innerHTML = "";
+
+      places.forEach((place: Place) => {
+        const listItem = document.createElement("div");
+        listItem.className =
+          "result-item h-16 flex flex-col justify-center";
+
+        const placeName = document.createElement("p");
+        placeName.innerText = place.place_name;
+        placeName.className = "font-semibold";
+
+        const placeAddress = document.createElement("p");
+        placeAddress.innerText = place.address_name;
+        placeAddress.className = "text-zinc-500 text-sm";
+
+        listItem.appendChild(placeName);
+        listItem.appendChild(placeAddress);
+
+        listItem.onclick = function () {
+          resultList.classList.add("hidden");
+          setSelectedFromDropdown(true);
+          setKeyword(place.place_name);
+          setLng(place.x);
+          setLat(place.y);
+
+          removeAllResultItems(resultList, "result-item");
+        };
+
+        resultList.appendChild(listItem);
+      });
+
+      resultList.classList.remove("hidden");
+    }
+
+    return () => kakaoMapScript.removeEventListener("load", onLoadKakaoAPI);
+  }, [debouncedKeyword]);
 
   return (
     <div className="flex flex-col h-screen items-center justify-center">
@@ -337,6 +327,11 @@ const Write = () => {
             type="text"
             name="location"
             id="location"
+            value={keyword}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setKeyword(e.target.value);
+              setSelectedFromDropdown(false);
+            }}
             placeholder="만날 장소를 입력해주세요."
             className="placeholder:text-zinc-500 text-slate-800 border-[1.5px] border-solid border-pink outline-darkpink rounded-[3px] h-11 w-full px-4 py-2.5 font-semibold text-sm"
           />

@@ -16,10 +16,6 @@ declare global {
   }
 }
 
-// type ErrorType<T> = {
-//   error: T | unknown;
-// };
-
 const getPostData = async (id: number) => {
   const res = await api.get(`/api/v1/boards/${id}`, { withCredentials: true });
 
@@ -181,6 +177,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
   useEffect(() => {
     if (isSuccess && postData) {
       setCurrentPerson(postData.currentPerson);
+      console.log(postData)
       loadKakaoMap(postData.location.latitude, postData.location.longitude);
     }
   }, [isSuccess, postData]);
