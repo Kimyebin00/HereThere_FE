@@ -172,7 +172,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
                 resultList.innerHTML =
                   '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
               }
-            }
+            },
           );
         } else {
           resultList.innerHTML = "";
@@ -191,8 +191,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
     kakaoMapScript.addEventListener("load", onLoadKakaoAPI);
 
     function displayPlaces(places: Place[]) {
-      const resultList = document.getElementById(
-        "result-list") as HTMLElement;
+      const resultList = document.getElementById("result-list") as HTMLElement;
 
       resultList.innerHTML = "";
 

@@ -191,8 +191,7 @@ const Write = () => {
     kakaoMapScript.addEventListener("load", onLoadKakaoAPI);
 
     function displayPlaces(places: Place[]) {
-      const resultList = document.getElementById(
-        "result-list") as HTMLElement;
+      const resultList = document.getElementById("result-list") as HTMLElement;
 
       resultList.innerHTML = "";
 

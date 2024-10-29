@@ -3,10 +3,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import StudyInCafeImage from "@/assets/previewImages/StudyInCafe.png";
-import CoffeeChatImage from "@/assets/previewImages/CoffeeChat.png";
-import BoardgameImage from "@/assets/previewImages/BoardGame.png";
-import NoImage from "@/assets/previewImages/NoImage.png";
 import LocationIcon from "@/assets/previewImages/LocationIcon.png";
 import TimeIcon from "@/assets/previewImages/TimeIcon.png";
 import PersonnelIcon from "@/assets/previewImages/PersonnelIcon.png";
@@ -32,10 +28,10 @@ const tagColors: { [key: string]: string } = {
 };
 
 const categoryImages: { [key: string]: string } = {
-  커피챗: CoffeeChatImage,
-  카공: StudyInCafeImage,
-  보드게임: BoardgameImage,
-  기타: NoImage, // 기타나 해당 카테고리가 없을 때는 NoImage를 사용
+  커피챗: "/images/CoffeeChat.png",
+  카공: "/images/StudyInCafe.png",
+  보드게임: "/images/BoardGame.png",
+  기타: "/images/NoImage.png",
 };
 
 const PostPreview: React.FC<PostPreviewProps> = ({
@@ -80,9 +76,8 @@ const PostPreview: React.FC<PostPreviewProps> = ({
       ? tagColors[tag[0]] || "bg-lightgray"
       : "bg-lightgray";
 
-  const imageSrc =
-    tag && tag.length > 0 ? categoryImages[tag[0]] || NoImage : NoImage;
-
+  const imageSrc = tag && tag.length > 0 ? categoryImages[tag[0]] : categoryImages["기타"];
+  
   const content = (
     <div className="flex flex-row w-[30rem] xl:w-[32rem] h-32 bg-white rounded-3xl p-3 border border-1 border-lightgray cursor-pointer transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-lightgray hover:border-darkpink ">
       <Image
