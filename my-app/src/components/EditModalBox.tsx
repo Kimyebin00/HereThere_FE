@@ -42,7 +42,8 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
   const [keyword, setKeyword] = useState<string>(
     postData.location?.locationName,
   );
-  const [selectedFromDropdown, setSelectedFromDropdown] = useState<boolean>(true);
+  const [selectedFromDropdown, setSelectedFromDropdown] =
+    useState<boolean>(true);
   const debouncedKeyword = useDebounce(keyword, 300);
 
   const mutation = useMutation({
@@ -153,7 +154,8 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
         ) as HTMLElement;
 
         if (debouncedKeyword.trim() && !selectedFromDropdown) {
-          ps.keywordSearch(debouncedKeyword,
+          ps.keywordSearch(
+            debouncedKeyword,
             function (data: Place[], status: string) {
               resultList.classList.add(
                 "h-[18rem]",
@@ -170,7 +172,8 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
                 resultList.innerHTML =
                   '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
               }
-            });
+            }
+          );
         } else {
           resultList.innerHTML = "";
           resultList.classList.remove(
@@ -179,7 +182,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
             "border",
             "border-[1px]",
             "rounded-[3px]",
-            "border-zinc-300"
+            "border-zinc-300",
           );
         }
       });
@@ -189,8 +192,7 @@ const EditModalBox = ({ postData, clickModal }: EditModalBoxProps) => {
 
     function displayPlaces(places: Place[]) {
       const resultList = document.getElementById(
-        "result-list",
-      ) as HTMLElement;
+        "result-list") as HTMLElement;
 
       resultList.innerHTML = "";
 

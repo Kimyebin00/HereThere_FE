@@ -154,7 +154,8 @@ const Write = () => {
         ) as HTMLElement;
 
         if (debouncedKeyword.trim() && !selectedFromDropdown) {
-          ps.keywordSearch(debouncedKeyword,
+          ps.keywordSearch(
+            debouncedKeyword,
             function (data: Place[], status: string) {
               resultList.classList.add(
                 "h-[18rem]",
@@ -171,7 +172,8 @@ const Write = () => {
                 resultList.innerHTML =
                   '<div class="result-item mt-2">검색 결과가 없습니다.</div>';
               }
-            });
+            },
+          );
         } else {
           resultList.innerHTML = "";
           resultList.classList.remove(
@@ -180,7 +182,7 @@ const Write = () => {
             "border",
             "border-[1px]",
             "rounded-[3px]",
-            "border-zinc-300"
+            "border-zinc-300",
           );
         }
       });
@@ -190,15 +192,13 @@ const Write = () => {
 
     function displayPlaces(places: Place[]) {
       const resultList = document.getElementById(
-        "result-list",
-      ) as HTMLElement;
+        "result-list") as HTMLElement;
 
       resultList.innerHTML = "";
 
       places.forEach((place: Place) => {
         const listItem = document.createElement("div");
-        listItem.className =
-          "result-item h-16 flex flex-col justify-center";
+        listItem.className = "result-item h-16 flex flex-col justify-center";
 
         const placeName = document.createElement("p");
         placeName.innerText = place.place_name;
