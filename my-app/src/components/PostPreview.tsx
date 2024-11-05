@@ -52,7 +52,7 @@ const PostPreview: React.FC<PostPreviewProps> = ({
   useEffect(() => {
     if (boardId) {
       const eventSource = new EventSource(
-        `http://localhost:8000/sse/board/${boardId}`,
+        `http://100.24.131.38:8000/sse/board/${boardId}`,
       );
 
       eventSource.onmessage = (event: MessageEvent) => {

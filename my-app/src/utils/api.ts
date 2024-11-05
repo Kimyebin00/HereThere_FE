@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000", // 프록시 설정에 맞춘 baseURL
+  baseURL: "http://100.24.131.38:8000", // 프록시 설정에 맞춘 baseURL
 });
 
 api.interceptors.request.use(

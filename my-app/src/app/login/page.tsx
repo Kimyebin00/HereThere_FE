@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Logo from "@/assets/Logo.svg";
 
-const redirectUri = "http://localhost:8000/api/v1/auth/redirect";
+const redirectUri = "http://100.24.131.38:8000/api/v1/auth/redirect";
 const scope = ["profile_nickname"].join(",");
 
 // Kakao 객체의 타입을 명확히 선언

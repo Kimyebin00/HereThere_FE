@@ -40,7 +40,7 @@ type MessagesByChatRoom = {
 
 // 사용자 정보를 가져오는 함수 (username 가져옴)
 const fetchUserInfo = async () => {
-  const response = await axios.get("http://localhost:8000/api/v1/users", {
+  const response = await axios.get("http://100.24.131.38:8000/api/v1/users", {
     withCredentials: true,
   });
   return response.data.username; // username 반환
@@ -48,7 +48,7 @@ const fetchUserInfo = async () => {
 
 const fetchChatRooms = async () => {
   const response = await axios.get(
-    "http://localhost:8000/api/v1/users/chatrooms",
+    "http://100.24.131.38:8000/api/v1/users/chatrooms",
     {
       withCredentials: true,
     },
@@ -58,7 +58,7 @@ const fetchChatRooms = async () => {
 
 const fetchChatRoomDetails = async (chatRoomId: number) => {
   const response = await axios.get(
-    `http://localhost:8000/api/v1/chatrooms/${chatRoomId}`,
+    `http://100.24.131.38:8000/api/v1/chatrooms/${chatRoomId}`,
     {
       withCredentials: true,
     },
@@ -68,7 +68,7 @@ const fetchChatRoomDetails = async (chatRoomId: number) => {
 
 const sendMessage = async ({ chatRoomId, content }: sendChatProps) => {
   const response = await axios.post(
-    `http://localhost:8000/api/v1/chatrooms/${chatRoomId}/messages`,
+    `http://100.24.131.38:8000/api/v1/chatrooms/${chatRoomId}/messages`,
     { content },
     {
       withCredentials: true,
@@ -79,7 +79,7 @@ const sendMessage = async ({ chatRoomId, content }: sendChatProps) => {
 
 const leaveChatRoom = async (chatRoomId: number) => {
   const response = await axios.delete(
-    `http://localhost:8000/api/v1/chatrooms/${chatRoomId}/leave`,
+    `http://100.24.131.38:8000/api/v1/chatrooms/${chatRoomId}/leave`,
     {
       withCredentials: true,
     },
