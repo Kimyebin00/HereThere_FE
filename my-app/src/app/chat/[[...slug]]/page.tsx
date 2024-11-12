@@ -54,12 +54,9 @@ const fetchChatRooms = async () => {
 };
 
 const fetchChatRoomDetails = async (chatRoomId: number) => {
-  const response = await api.get(
-    `/api/v1/chatrooms/${chatRoomId}`,
-    {
-      withCredentials: true,
-    },
-  );
+  const response = await api.get(`/api/v1/chatrooms/${chatRoomId}`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 
@@ -75,12 +72,9 @@ const sendMessage = async ({ chatRoomId, content }: sendChatProps) => {
 };
 
 const leaveChatRoom = async (chatRoomId: number) => {
-  const response = await api.delete(
-    `/api/v1/chatrooms/${chatRoomId}/leave`,
-    {
-      withCredentials: true,
-    },
-  );
+  const response = await api.delete(`/api/v1/chatrooms/${chatRoomId}/leave`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 
