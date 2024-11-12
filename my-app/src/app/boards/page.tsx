@@ -2,7 +2,7 @@
 
 import PostPreview from "@/components/PostPreview";
 import MainTab from "@/components/MainTab";
-import axios from "axios";
+import api from "@/utils/api";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Board } from "@/types/boards";
@@ -10,7 +10,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
 const getBoards = async (page: number, limit: number) => {
-  const res = await axios.get("http://100.24.131.38:8000/api/v1/boards/", {
+  const res = await api.get("/api/v1/boards/", {
     params: { page, limit },
     withCredentials: true,
   });
