@@ -198,7 +198,7 @@ const Chat = ({ params }: { params: { slug?: string[] } }) => {
   }, [newMessages]);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:8000");
+    socketRef.current = io("https://meetingsquare.site");
     const handleConnect = () => {
       console.log("Connected to Socket.IO server");
     };

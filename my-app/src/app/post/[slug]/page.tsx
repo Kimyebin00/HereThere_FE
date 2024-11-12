@@ -187,7 +187,7 @@ const Post = ({ params }: { params: { slug: number } }) => {
     //getMutation.mutate(params.slug);
 
     const eventSource = new EventSource(
-      `http://localhost:8000/sse/board/${params.slug}`,
+      `https://meetingsquare.site/sse/board/${params.slug}`,
     );
 
     eventSource.onmessage = (event: MessageEvent) => {
