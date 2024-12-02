@@ -90,7 +90,13 @@ const Post = ({ params }: { params: { slug: number } }) => {
   };
 
   const clickJoinButton = () => {
-    joinMutation.mutate(params.slug);
+    if (postData.status === "CLOSE") {
+      alert("해당 모집글은 기간이 종료되어 참여 불가능합니다.");
+    } else if (currentPerson === postData.maxCapacity) {
+      alert("해당 모집글은 인원이 마감되어 참여 불가능합니다.");
+    } else {
+      joinMutation.mutate(params.slug);
+    }
   };
 
   const loadKakaoMap = (latitude: string, longitude: string) => {
