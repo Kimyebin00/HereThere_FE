@@ -83,6 +83,7 @@
   <tbody>
     <tr>
       <th align="center" width="160px">Frontend</th>
+      <th align="center" width="160px">Backend</th>
       <th align="center" width="160px">DevOps</th>
       <th align="center" width="160px">Etc</th>
     </tr>
@@ -97,6 +98,15 @@
         <img src="https://img.shields.io/badge/Socket.io-010101?style=flat&logo=Socket.io&logoColor=white" />
         <br />
         <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white" />
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/badge/NestJS-E0234E?style=flat&logo=nestjs&logoColor=white">
+        <br />
+        <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white">
+        <br />
+        <img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=flat&logo=jsonwebtokens&logoColor=white">
+        <br />
+        <img src="https://img.shields.io/badge/Socket.io-010101?style=flat&logo=Socket.io&logoColor=white">
       </td>
       <td align="center">
         <img src="https://img.shields.io/badge/Github Actions-2088FF?style=flat&logo=Github Actions&logoColor=white">
@@ -115,6 +125,7 @@
   </tbody>
 </table>
 <br/>
+
 
 ## Team
 <table>
