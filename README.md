@@ -3,6 +3,22 @@
   <li>보드게임, 커피챗 등 <b>특정 주제의 활동에 대해 모임 인원을 모집하는 서비스</b>이다.</li>
 </ul>
 
+## System Architecture
+서비스의 전체적인 구조를 나타내는 시스템 아키텍처 다이어그램입니다.
+
+<img width="821" alt="스크린샷 2025-02-04 오후 10 25 08" src="https://github.com/user-attachments/assets/619290f9-fc2d-4c7a-af24-342d73bd2ec6" />
+
+<br/>
+
+## ERD (Entity Relationship Diagram)
+서비스에서 사용하는 데이터베이스의 ERD입니다.
+<img width="1491" alt="스크린샷 2025-02-04 오후 10 29 52" src="https://github.com/user-attachments/assets/c552a426-9623-4084-b168-544fef25d1be" />
+
+
+
+<br/>
+
+
 ## Demo
 <div>
   <table>
